@@ -1,1 +1,126 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartBazar BD - Admin Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+    }
+    .box {
+      background: white;
+      width: 85%;
+      max-width: 380px;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px #0002;
+    }
+    h2 { text-align: center; color: #168447; }
+    input, button {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 13px;
+      margin: 9px 0;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input { border: 1px solid #ccc; }
+    button {
+      border: 0;
+      background: #168447;
+      color: white;
+      font-weight: bold;
+    }
+    #message { text-align: center; color: #c0392b; }
+    #dashboard { display: none; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>SmartBazar BD</h2>
+    <h3 id="heading">Admin Login</h3>
 
+    <div id="login">
+      <input id="email" type="email" placeholder="আপনার ইমেইল">
+      <input id="password" type="password" placeholder="পাসওয়ার্ড">
+      <button id="loginBtn">Login করুন</button>
+    </div>
+
+    <div id="dashboard">
+      <h3>স্বাগতম, Super Admin!</h3>
+      <p>আপনার Admin Login সফল হয়েছে।</p>
+      <button id="logoutBtn">Logout</button>
+    </div>
+
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+
+    import { getAuth, signInWithEmailAndPassword, signOut }
+      from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+    import { getFirestore, doc, getDoc }
+      from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
+      authDomain: "smart-bazar-24.firebaseapp.com",
+      projectId: "smart-bazar-24",
+      storageBucket: "smart-bazar-24.firebasestorage.app",
+      messagingSenderId: "100684524932",
+      appId: "1:100684524932:web:449afbb7e4d9f2ad2e81d1",
+      measurementId: "G-RGHK2GV9BC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const message = document.getElementById("message");
+
+    document.getElementById("loginBtn").onclick = async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      message.textContent = "যাচাই করা হচ্ছে...";
+
+      try {
+        const result = await signInWithEmailAndPassword(
+          auth, email, password
+        );
+
+        const adminRef = doc(db, "admins", result.user.uid);
+        const adminSnap = await getDoc(adminRef);
+
+        if (!adminSnap.exists() ||
+            adminSnap.data().role !== "superadmin") {
+          await signOut(auth);
+          throw new Error("আপনার Admin অনুমতি নেই।");
+        }
+
+        document.getElementById("login").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        document.getElementById("heading").textContent = "Admin Dashboard";
+        message.textContent = "";
+
+      } catch (error) {
+        message.textContent = error.message;
+      }
+    };
+
+    document.getElementById("logoutBtn").onclick = async () => {
+      await signOut(auth);
+      location.reload();
+    };
+  </script>
+</body>
+  </html>
