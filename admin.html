@@ -51,8 +51,19 @@
       <input id="password" type="password" placeholder="পাসওয়ার্ড">
       <button id="loginBtn">Login করুন</button>
     </div>
+    
+      <div id="dashboard">
+<h3>নতুন পণ্য যোগ করুন</h3>
 
-    <div id="dashboard">
+<input id="productName" type="text" placeholder="পণ্যের নাম">
+
+<input id="productPrice" type="number" placeholder="পণ্যের দাম">
+
+<textarea id="productDescription" placeholder="পণ্যের বিবরণ"></textarea>
+
+<button id="saveProductBtn">পণ্য সংরক্ষণ করুন</button>
+
+<p id="productMessage"></p>
       <h3>স্বাগতম, Super Admin!</h3>
       <p>আপনার Admin Login সফল হয়েছে।</p>
       <button id="logoutBtn">Logout</button>
@@ -68,9 +79,8 @@
     import { getAuth, signInWithEmailAndPassword, signOut }
       from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-    import { getFirestore, doc, getDoc }
+    import { getFirestore, doc, getDoc, addDoc, collection } 
       from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-
     const firebaseConfig = {
       apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
       authDomain: "smart-bazar-24.firebaseapp.com",
@@ -121,6 +131,29 @@
       await signOut(auth);
       location.reload();
     };
+    document.getElementById("saveProductBtn").onclick = async () => {
+  const name = document.getElementById("productName").value.trim();
+  const price = Number(document.getElementById("productPrice").value);
+  const description = document.getElementById("productDescription").value.trim();
+  const message = document.getElementById("productMessage");
+
+  if (!name || !price || price <= 0) {
+    message.textContent = "পণ্যের নাম ও সঠিক দাম দিন।";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "products"), {
+      name,
+      price,
+      description,
+      createdAt: new Date()
+    });
+    message.textContent = "পণ্য সফলভাবে সংরক্ষণ হয়েছে!";
+  } catch (error) {
+    message.textContent = "সমস্যা হয়েছে: " + error.message;
+  }
+};
   </script>
 </body>
   </html>
