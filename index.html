@@ -1,312 +1,369 @@
 <!DOCTYPE html>
-<html <img src="./logo.png" alt="SMART BAZAR 24 Logo">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123b83">
-<title>SMART BAZAR 24 - Online Shopping</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART BAZAR 24</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f4f6fa;color:#222}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer;border:0}
-header{background:white;padding:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:10;box-shadow:0 2px 10px #0001}
-.logo{width:65px;height:55px;object-fit:contain}
-.brand{font-size:17px;font-weight:bold;color:#123b83}
-.search{display:flex;flex:1;min-width:150px}
-.search input{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px 0 0 6px}
-.search button{background:#f36b18;color:white;padding:10px 15px;border-radius:0 6px 6px 0}
-.cartbtn{background:#123b83;color:white;padding:12px;border-radius:6px}
-nav{background:#123b83;color:white;display:flex;gap:25px;padding:14px;overflow:auto;white-space:nowrap}
-nav a{color:white;text-decoration:none}
-.hero{margin:15px auto;max-width:1100px;padding:0 12px}
-.hero img{width:100%;height:210px;object-fit:contain;background:white;border-radius:12px}
-.container{max-width:1100px;margin:25px auto;padding:0 12px}
-.heading{font-size:21px;color:#123b83;margin-bottom:15px}
-.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
-.category{background:white;padding:17px 5px;text-align:center;border-radius:9px;cursor:pointer;box-shadow:0 2px 7px #0001}
-.category span{display:block;font-size:27px;margin-bottom:7px}
-.products{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}
-.product{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px #0001}
-.product img{width:100%;height:175px;object-fit:cover}
-.info{padding:11px}
-.info h3{font-size:14px;min-height:36px;line-height:1.5}
-.price{color:#ed6418;font-weight:bold;font-size:19px;margin:8px 0}
-.orderbtn,.addbtn{width:100%;padding:11px;border-radius:6px;margin-top:7px}
-.orderbtn{background:#168747;color:white}
-.addbtn{background:#fff0e4;color:#d65a12}
-.promo{background:linear-gradient(120deg,#123b83,#2675ca);color:white;padding:27px;text-align:center;border-radius:12px;line-height:1.8}
-footer{background:#10254e;color:white;padding:30px 18px;margin-top:35px;line-height:2}
-footer h2{color:#ffbd52}
-.bottom{display:none}
-.modal{display:none;position:fixed;inset:0;background:#0009;z-index:30;padding:15px;overflow:auto}
-.box{background:white;max-width:480px;margin:35px auto;padding:22px;border-radius:12px;position:relative}
-.close{float:right;padding:6px 10px;background:#eee;border-radius:5px}
-.box h2{color:#123b83;margin:10px 0 18px}
-.box label{display:block;margin-top:12px;font-size:14px}
-.box input,.box textarea,.box select{width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;margin-top:6px}
-.box textarea{min-height:75px}
-.sendbtn{width:100%;background:#168747;color:white;padding:14px;border-radius:7px;margin-top:18px;font-weight:bold}
-.cartitem{padding:12px 0;border-bottom:1px solid #eee;line-height:1.8}
-@media(max-width:650px){
- .brand{font-size:14px}
- .logo{width:48px;height:45px}
- nav{display:none}
- .categories{grid-template-columns:repeat(3,1fr)}
- .products{grid-template-columns:repeat(2,1fr);gap:9px}
- .product img{height:145px}
- .info{padding:8px}
- .info h3{font-size:13px}
- .price{font-size:16px}
- .hero img{height:150px}
- .bottom{display:flex;position:fixed;bottom:0;left:0;width:100%;background:white;justify-content:space-around;padding:10px 0;z-index:15;box-shadow:0 -2px 10px #0002}
- .bottom button{background:white;color:#123b83;font-size:11px}
- .bottom span{display:block;font-size:20px}
- footer{padding-bottom:80px}
-}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5fa;color:#202b3c;font-family:Arial,sans-serif}
+header{background:#102e57;color:white;padding:17px;text-align:center}
+header h2{margin:0;font-size:25px}
+header p{margin:6px}
+nav{position:sticky;top:0;z-index:10;background:white;display:flex;justify-content:space-around;padding:12px 3px;box-shadow:0 2px 8px #ddd}
+button{border:0;border-radius:8px;padding:11px 14px;background:#123c70;color:white;cursor:pointer}
+nav button{background:#edf2f8;color:#123c70;padding:10px}
+main{max-width:950px;margin:auto;padding:14px}
+.page{display:none}
+.page.active{display:block}
+.banner{background:linear-gradient(120deg,#10366d,#2785cf);color:white;padding:38px 15px;text-align:center;border-radius:16px;margin:15px 0}
+.banner h1{font-size:28px}
+input,textarea,select{width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin:7px 0;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card,.panel{background:white;border-radius:13px;padding:12px;box-shadow:0 2px 9px #dfe3eb;margin-bottom:12px}
+.card img{width:100%;height:145px;object-fit:cover;border-radius:9px}
+.card h4{margin:9px 0}
+.price{font-weight:bold;color:#07854c;font-size:18px}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.actions button{flex:1;font-size:12px;padding:10px 5px}
+.green{background:#07834e}
+.orange{background:#ed771b}
+.setting{display:flex;justify-content:space-between;align-items:center;background:white;padding:16px;margin:9px 0;border-radius:10px;box-shadow:0 1px 5px #ddd;cursor:pointer}
+.setting b{font-size:15px}
+.muted{color:#777;font-size:13px}
+footer{text-align:center;padding:25px;color:#777}
+.back{background:#66768b;margin-bottom:12px}
+button:active{opacity:.7}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
-
 <body>
 
 <header>
-<img src="logo.png" class="logo" alt="Logo">
-<div class="brand">SMART BAZAR 24</div>
-
-<div class="search">
-<input id="search" placeholder="পণ্য খুঁজুন..." oninput="render()">
-<button onclick="render()">🔍</button>
-</div>
-
-<button class="cartbtn" onclick="openCart()">🛒 <span id="count">0</span></button>
+<h2>🛍️ SMART BAZAR 24</h2>
+<p>Shop Everything • Anytime • Anywhere</p>
 </header>
 
 <nav>
-<a href="#">হোম</a>
-<a href="#categories">ক্যাটাগরি</a>
-<a href="#products">সকল পণ্য</a>
-<a href="#contact">যোগাযোগ</a>
+<button onclick="show('home')">🏠 হোম</button>
+<button onclick="show('categories')">▦ ক্যাটাগরি</button>
+<button onclick="show('cart')">🛒 কার্ট <span id="count">0</span></button>
+<button onclick="show('settings')">⚙️ সেটিংস</button>
 </nav>
 
-<div class="hero">
-<img src="logo.png" alt="SMART BAZAR 24">
-</div>
+<main>
 
-<section class="container" id="categories">
-<h2 class="heading">🛍️ পণ্যের ক্যাটাগরি</h2>
-<div class="categories">
-<div class="category" onclick="filter('Fashion')"><span>👗</span>মেয়েদের পোশাক</div>
-<div class="category" onclick="filter('Men')"><span>👕</span>ছেলেদের পোশাক</div>
-<div class="category" onclick="filter('Shoes')"><span>👟</span>জুতা</div>
-<div class="category" onclick="filter('Beauty')"><span>💄</span>কসমেটিকস</div>
-<div class="category" onclick="filter('Electronics')"><span>📱</span>ইলেকট্রনিকস</div>
-<div class="category" onclick="filter('Home')"><span>🏠</span>ঘর ও বাসা</div>
-</div>
-</section>
-
-<section class="container">
-<div class="promo">
-<h2>SMART BAZAR 24</h2>
+<!-- HOME -->
+<section id="home" class="page active">
+<div class="banner">
+<h1>SMART BAZAR 24</h1>
 <p>সবকিছু এক জায়গায়, কেনাকাটা হোক সহজ ও আনন্দময়!</p>
 <p>Shop Everything • Anytime • Anywhere</p>
 </div>
+<input id="search" placeholder="🔍 পণ্য খুঁজুন..." oninput="renderProducts()">
+<h3>🔥 জনপ্রিয় পণ্য</h3>
+<div class="grid" id="products"></div>
 </section>
 
-<section class="container" id="products">
-<h2 class="heading">🔥 আমাদের সকল পণ্য</h2>
-<div class="products" id="productList"></div>
+<!-- CATEGORIES -->
+<section id="categories" class="page">
+<h3>🛍️ পণ্যের ক্যাটাগরি</h3>
+<div class="grid" id="categoryList"></div>
 </section>
 
-<section class="container">
-<div class="promo">
-<h2>আপনার পছন্দের পণ্য অর্ডার করুন</h2>
-<p>অর্ডার করুন সরাসরি WhatsApp-এর মাধ্যমে।</p>
+<!-- CART -->
+<section id="cart" class="page">
+<h3>🛒 আমার শপিং কার্ট</h3>
+<div id="cartItems"></div>
+<h3 id="total">মোট: ৳০</h3>
+<button class="green" onclick="checkout()">অর্ডার করুন</button>
+</section>
+
+<!-- CHECKOUT -->
+<section id="checkout" class="page">
+<h3>📦 অর্ডার সম্পন্ন করুন</h3>
+<div class="panel">
+<label>আপনার নাম</label>
+<input id="customer" placeholder="সম্পূর্ণ নাম">
+<label>মোবাইল নম্বর</label>
+<input id="phone" type="tel" placeholder="01XXXXXXXXX">
+<label>সম্পূর্ণ ঠিকানা</label>
+<textarea id="address" placeholder="গ্রাম, থানা, জেলা"></textarea>
+<label>পেমেন্ট পদ্ধতি</label>
+<select id="payment">
+<option value="ক্যাশ অন ডেলিভারি">ক্যাশ অন ডেলিভারি</option>
+<option value="বিকাশ">বিকাশ</option>
+<option value="নগদ">নগদ</option>
+</select>
+<input id="trx" placeholder="ট্রানজেকশন আইডি (প্রযোজ্য হলে)">
+<p class="muted">বিকাশ/নগদের পেমেন্ট নম্বর দোকান কর্তৃপক্ষের কাছ থেকে নিশ্চিত করুন।</p>
+<button class="green" onclick="placeOrder()">WhatsApp-এ অর্ডার পাঠান</button>
 </div>
 </section>
 
-<footer id="contact">
-<h2>SMART BAZAR 24</h2>
-<p>Shop Everything • Anytime • Anywhere</p>
-<p>📦 অনলাইন শপিং বাংলাদেশ</p>
-<p>📱 WhatsApp: +880 1916-551788</p>
-<p>© 2026 SMART BAZAR 24</p>
-</footer>
+<!-- SETTINGS -->
+<section id="settings" class="page">
+<h3>⚙️ সেটিংস</h3>
+<div class="setting" onclick="show('account')">👤 <b>My Account / আমার অ্যাকাউন্ট</b> ›</div>
+<div class="setting" onclick="show('editprofile')">✏️ <b>Edit Profile / প্রোফাইল</b> ›</div>
+<div class="setting" onclick="show('orders')">📦 <b>My Orders / আমার অর্ডার</b> ›</div>
+<div class="setting" onclick="show('wishlist')">❤️ <b>My Wishlist / পছন্দের পণ্য</b> ›</div>
+<div class="setting" onclick="show('address')">📍 <b>My Address / ঠিকানা</b> ›</div>
+<div class="setting" onclick="show('payments')">💳 <b>Payment Methods / পেমেন্ট</b> ›</div>
+<div class="setting" onclick="show('delivery')">🚚 <b>Delivery Information</b> ›</div>
+<div class="setting" onclick="show('support')">☎️ <b>Customer Support</b> ›</div>
+<div class="setting" onclick="show('chat')">💬 <b>Live Chat / সরাসরি চ্যাট</b> ›</div>
+<div class="setting" onclick="show('language')">🌐 <b>Language / ভাষা</b> ›</div>
+<div class="setting" onclick="show('notifications')">🔔 <b>Notifications</b> ›</div>
+<div class="setting" onclick="show('password')">🔐 <b>Change Password</b> ›</div>
+<div class="setting" onclick="show('about')">ℹ️ <b>About Us</b> ›</div>
+<div class="setting" onclick="show('privacy')">🛡️ <b>Privacy Policy</b> ›</div>
+<div class="setting" onclick="show('terms')">📄 <b>Terms & Conditions</b> ›</div>
+<button onclick="show('home')">হোম পেজে ফিরে যান</button>
+</section>
 
-<div class="bottom">
-<button onclick="window.scrollTo(0,0)"><span>🏠</span>হোম</button>
-<button onclick="document.getElementById('categories').scrollIntoView()"><span>▦</span>ক্যাটাগরি</button>
-<button onclick="openCart()"><span>🛒</span>কার্ট</button>
-<button onclick="showSettings()"><span>⚙️</span>সেটিংস</button>
-</div>
+<!-- ACCOUNT -->
+<section id="account" class="page panel">
+<h3>👤 My Account</h3>
+<div id="accountInfo">আপনার প্রোফাইল তথ্য এখানে দেখাবে।</div>
+<button onclick="show('editprofile')">প্রোফাইল সম্পাদনা</button>
+</section>
 
-<div class="modal" id="modal">
-<div class="box">
-<button class="close" onclick="closeModal()">✕</button>
-<div id="modalContent"></div>
-</div>
-</div>
+<section id="editprofile" class="page panel">
+<h3>✏️ Edit Profile</h3>
+<input id="pname" placeholder="আপনার নাম">
+<input id="pnumber" placeholder="মোবাইল নম্বর">
+<button onclick="saveProfile()">তথ্য সংরক্ষণ</button>
+</section>
+
+<section id="orders" class="page panel">
+<h3>📦 My Orders</h3>
+<div id="orderList">এখনো কোনো অর্ডার নেই।</div>
+</section>
+
+<section id="wishlist" class="page panel">
+<h3>❤️ My Wishlist</h3>
+<div id="wishList"></div>
+</section>
+
+<section id="address" class="page panel">
+<h3>📍 My Address</h3>
+<textarea id="savedAddress" placeholder="আপনার সম্পূর্ণ ঠিকানা"></textarea>
+<button onclick="saveAddress()">ঠিকানা সংরক্ষণ</button>
+</section>
+
+<section id="payments" class="page panel">
+<h3>💳 Payment Methods</h3>
+<p>🩷 বিকাশ</p>
+<p>🟠 নগদ</p>
+<p>💵 ক্যাশ অন ডেলিভারি</p>
+<p class="muted">প্রকৃত অনলাইন পেমেন্ট চালু করতে মার্চেন্ট অ্যাকাউন্ট ও পেমেন্ট গেটওয়ে সংযোগ করতে হবে।</p>
+</section>
+
+<section id="delivery" class="page panel">
+<h3>🚚 Delivery Information</h3>
+<p>ডেলিভারির ঠিকানা ও অর্ডারের তথ্য WhatsApp-এ পাঠানো যাবে।</p>
+<button onclick="whatsapp('আমি ডেলিভারি সম্পর্কে জানতে চাই')">ডেলিভারি সম্পর্কে জানুন</button>
+</section>
+
+<section id="support" class="page panel">
+<h3>☎️ Customer Support</h3>
+<p>WhatsApp: +8801916-551788</p>
+<button class="green" onclick="whatsapp('আমি কাস্টমার সাপোর্ট চাই')">সাপোর্ট নিন</button>
+<a href="tel:+8801916551788"><button>ফোন করুন</button></a>
+</section>
+
+<section id="chat" class="page panel">
+<h3>💬 Customer Chat</h3>
+<p>আমাদের প্রতিনিধির সাথে কথা বলুন।</p>
+<button class="green" onclick="whatsapp('আমি একজন প্রতিনিধির সাথে চ্যাট করতে চাই')">চ্যাট শুরু করুন</button>
+</section>
+
+<section id="language" class="page panel">
+<h3>🌐 Language</h3>
+<button onclick="alert('বাংলা নির্বাচিত')">বাংলা</button>
+<button onclick="alert('English selected')">English</button>
+</section>
+
+<section id="notifications" class="page panel">
+<h3>🔔 Notifications</h3>
+<p>অর্ডার ও অফারের আপডেট WhatsApp-এর মাধ্যমে পেতে পারেন।</p>
+<button onclick="whatsapp('আমি নতুন অফারের আপডেট পেতে চাই')">আপডেটের জন্য যোগাযোগ</button>
+</section>
+
+<section id="password" class="page panel">
+<h3>🔐 Password</h3>
+<p>এই ডেমোতে অ্যাকাউন্ট লগইন ব্যবস্থা নেই। নিরাপদ পাসওয়ার্ড ব্যবস্থার জন্য সার্ভার সংযোগ প্রয়োজন।</p>
+</section>
+
+<section id="about" class="page panel">
+<h3>ℹ️ About SMART BAZAR 24</h3>
+<p>SMART BAZAR 24 একটি অনলাইন শপিং প্ল্যাটফর্ম। আমাদের লক্ষ্য সহজ ও সুবিধাজনক কেনাকাটা।</p>
+</section>
+
+<section id="privacy" class="page panel">
+<h3>🛡️ Privacy Policy</h3>
+<p>অর্ডার ও ডেলিভারির জন্য দেওয়া তথ্য ব্যবহার করা হবে। অনুমতি ছাড়া ব্যক্তিগত তথ্য প্রকাশ করা হবে না।</p>
+</section>
+
+<section id="terms" class="page panel">
+<h3>📄 Terms & Conditions</h3>
+<p>পণ্য, মূল্য, ডেলিভারি ও রিটার্নের শর্ত অর্ডার নিশ্চিত করার আগে ক্রেতাকে জানানো হবে।</p>
+</section>
+
+</main>
+
+<footer>© 2026 SMART BAZAR 24<br>All Rights Reserved</footer>
 
 <script>
-const WHATSAPP="8801916551788";
+const WA="8801916551788";
 
 const products=[
-{id:1,name:"মেয়েদের সুন্দর থ্রি-পিস",price:1250,cat:"Fashion",img:"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600"},
-{id:2,name:"স্টাইলিশ মেয়েদের পোশাক",price:950,cat:"Fashion",img:"https://images.unsplash.com/photo-1583391733956-6c78276477e7?w=600"},
-{id:3,name:"ছেলেদের টি-শার্ট",price:450,cat:"Men",img:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600"},
-{id:4,name:"ফ্যাশনেবল জুতা",price:1100,cat:"Shoes",img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600"},
-{id:5,name:"বিউটি ও স্কিনকেয়ার",price:650,cat:"Beauty",img:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600"},
-{id:6,name:"স্মার্ট ওয়াচ",price:1450,cat:"Electronics",img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600"},
-{id:7,name:"হেডফোন",price:750,cat:"Electronics",img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600"},
-{id:8,name:"ঘর সাজানোর পণ্য",price:550,cat:"Home",img:"https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=600"}
+["মেয়েদের থ্রি-পিস",850,"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500"],
+["ছেলেদের টি-শার্ট",450,"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"],
+["ফ্যাশন জুতা",950,"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"],
+["মেয়েদের ব্যাগ",650,"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500"],
+["কসমেটিকস",550,"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500"],
+["স্মার্টফোন",12000,"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500"],
+["হাতঘড়ি",750,"https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=500"],
+["সানগ্লাস",350,"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500"],
+["হ্যান্ডব্যাগ",800,"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=500"],
+["কিচেন আইটেম",500,"https://images.unsplash.com/photo-1556911220-bff31c812dba?w=500"],
+["মেয়েদের ড্রেস",1100,"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=500"],
+["স্পোর্টস জুতা",1250,"https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500"]
 ];
 
-let cart=JSON.parse(localStorage.getItem("sb24cart")||"[]");
-let category="All";
+const categories=["মেয়েদের পোশাক","ছেলেদের পোশাক","জুতা","কসমেটিকস","ইলেকট্রনিকস","ব্যাগ","ঘড়ি","ঘর ও রান্নাঘর"];
+let cart=JSON.parse(localStorage.getItem("cart")||"[]");
+let wishlist=JSON.parse(localStorage.getItem("wishlist")||"[]");
 
-function render(){
- const q=document.getElementById("search").value.toLowerCase();
- const list=products.filter(p=>
- (category==="All"||p.cat===category)&&p.name.toLowerCase().includes(q)
- );
-
- document.getElementById("productList").innerHTML=list.map(p=>`
- <div class="product">
- <img src="${p.img}" alt="${p.name}">
- <div class="info">
- <h3>${p.name}</h3>
- <div class="price">৳${p.price}</div>
- <button class="orderbtn" onclick="startOrder(${p.id})">📲 অর্ডার করুন</button>
- <button class="addbtn" onclick="addCart(${p.id})">🛒 কার্টে যোগ করুন</button>
- </div></div>
- `).join("")||"<p>কোনো পণ্য পাওয়া যায়নি।</p>";
- updateCount();
+function show(id){
+document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+if(id==="cart")renderCart();
+if(id==="orders")renderOrders();
+if(id==="wishlist")renderWishlist();
+if(id==="account")renderAccount();
+window.scrollTo(0,0);
 }
 
-function filter(c){
- category=c;
- render();
- document.getElementById("products").scrollIntoView({behavior:"smooth"});
+function renderProducts(){
+let q=document.getElementById("search").value.toLowerCase();
+document.getElementById("products").innerHTML=products.map((p,i)=>({p,i})).filter(x=>x.p[0].toLowerCase().includes(q)).map(({p,i})=>`
+<div class="card">
+<img src="${p[2]}" alt="${p[0]}" loading="lazy">
+<h4>${p[0]}</h4>
+<div class="price">৳${p[1]}</div>
+<div class="actions">
+<button onclick="addCart(${i})">কার্টে যোগ</button>
+<button class="green" onclick="buy(${i})">অর্ডার করুন</button>
+<button class="orange" onclick="addWish(${i})">♡</button>
+</div>
+</div>`).join("");
 }
 
-function updateCount(){
- document.getElementById("count").innerText=cart.reduce((s,p)=>s+p.qty,0);
- localStorage.setItem("sb24cart",JSON.stringify(cart));
+function renderCategories(){
+document.getElementById("categoryList").innerHTML=categories.map(c=>`
+<div class="setting" onclick="filterCategory('${c}')">${c} <span>›</span></div>`).join("");
+}
+function filterCategory(c){
+document.getElementById("search").value="";
+show("home");
+renderProducts();
+alert(c+" ক্যাটাগরি বাছাই করা হয়েছে। সব পণ্য দেখতে হোমে যান।");
 }
 
-function addCart(id){
- const p=products.find(x=>x.id===id);
- const old=cart.find(x=>x.id===id);
- if(old)old.qty++;
- else cart.push({...p,qty:1});
- updateCount();
- alert("পণ্য কার্টে যোগ হয়েছে!");
+function addCart(i){
+cart.push(i);
+saveCart();
+alert("পণ্য কার্টে যোগ হয়েছে");
+}
+function saveCart(){
+localStorage.setItem("cart",JSON.stringify(cart));
+document.getElementById("count").innerText=cart.length;
+}
+function renderCart(){
+let total=0;
+document.getElementById("cartItems").innerHTML=cart.map((i,n)=>{
+let p=products[i];total+=p[1];
+return `<div class="setting">${p[0]} — ৳${p[1]} <button onclick="removeCart(${n})">বাদ দিন</button></div>`;
+}).join("")||"আপনার কার্ট খালি।";
+document.getElementById("total").innerText="মোট: ৳"+total;
+}
+function removeCart(n){cart.splice(n,1);saveCart();renderCart();}
+function buy(i){cart=[i];saveCart();show("checkout");}
+function checkout(){
+if(!cart.length){alert("আগে পণ্য কার্টে যোগ করুন");return;}
+show("checkout");
 }
 
-function openCart(){
- if(!cart.length){
- show("<h2>🛒 আপনার কার্ট খালি</h2><p>আগে পণ্য নির্বাচন করুন।</p>");
- return;
- }
- let total=cart.reduce((s,p)=>s+p.price*p.qty,0);
- show(`<h2>🛒 আমার কার্ট</h2>
- ${cart.map(p=>`
- <div class="cartitem">
- <b>${p.name}</b><br>
- দাম: ৳${p.price} × ${p.qty}
- <button onclick="changeQty(${p.id},-1)">−</button>
- <button onclick="changeQty(${p.id},1)">+</button>
- </div>`).join("")}
- <h3 style="margin-top:15px">মোট: ৳${total}</h3>
- <button class="sendbtn" onclick="startCartOrder()">📲 WhatsApp-এ অর্ডার করুন</button>`);
+function whatsapp(msg){
+window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(msg),"_blank");
 }
 
-function changeQty(id,n){
- let p=cart.find(x=>x.id===id);
- if(p)p.qty+=n;
- cart=cart.filter(x=>x.qty>0);
- updateCount();
- openCart();
+function placeOrder(){
+let name=document.getElementById("customer").value.trim();
+let phone=document.getElementById("phone").value.trim();
+let address=document.getElementById("address").value.trim();
+if(!name||!phone||!address||!cart.length){
+alert("নাম, ফোন, ঠিকানা ও পণ্য পূরণ করুন");
+return;
+}
+let total=cart.reduce((s,i)=>s+products[i][1],0);
+let method=document.getElementById("payment").value;
+let trx=document.getElementById("trx").value;
+let message="SMART BAZAR 24 ORDER\nনাম: "+name+
+"\nফোন: "+phone+"\nঠিকানা: "+address+
+"\nপেমেন্ট: "+method+"\nTrxID: "+trx+
+"\nপণ্য:\n"+cart.map(i=>products[i][0]+" ৳"+products[i][1]).join("\n")+
+"\nমোট: ৳"+total;
+
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+orders.push({name,phone,address,total,method,items:cart.map(i=>products[i][0]),date:new Date().toLocaleString()});
+localStorage.setItem("orders",JSON.stringify(orders));
+whatsapp(message);
+cart=[];
+saveCart();
+alert("WhatsApp-এ অর্ডার পাঠানোর পেজ খোলা হয়েছে। Send চাপ দিয়ে অর্ডার নিশ্চিত করুন।");
+show("home");
 }
 
-function startOrder(id){
- const p=products.find(x=>x.id===id);
- openForm([{...p,qty:1}]);
+function saveProfile(){
+localStorage.setItem("pname",document.getElementById("pname").value);
+localStorage.setItem("pnumber",document.getElementById("pnumber").value);
+alert("প্রোফাইল সংরক্ষিত হয়েছে");
+}
+function renderAccount(){
+let name=localStorage.getItem("pname")||"নাম যোগ করা হয়নি";
+let number=localStorage.getItem("pnumber")||"নম্বর যোগ করা হয়নি";
+document.getElementById("accountInfo").innerHTML="<p>নাম: "+name+"</p><p>মোবাইল: "+number+"</p>";
+}
+function saveAddress(){
+localStorage.setItem("address",document.getElementById("savedAddress").value);
+alert("ঠিকানা সংরক্ষিত হয়েছে");
+}
+function renderOrders(){
+let orders=JSON.parse(localStorage.getItem("orders")||"[]");
+document.getElementById("orderList").innerHTML=orders.map(o=>`
+<div class="setting"><div><b>${o.date}</b><p>${o.items.join(", ")}</p>৳${o.total}<br>${o.method}</div></div>`).join("")||"এখনো কোনো অর্ডার নেই।";
+}
+function addWish(i){
+if(!wishlist.includes(i))wishlist.push(i);
+localStorage.setItem("wishlist",JSON.stringify(wishlist));
+alert("পছন্দের তালিকায় যোগ হয়েছে");
+}
+function renderWishlist(){
+document.getElementById("wishList").innerHTML=wishlist.map(i=>`
+<div class="setting">${products[i][0]} — ৳${products[i][1]} <button onclick="buy(${i})">অর্ডার</button></div>`).join("")||"কোনো পণ্য নেই।";
 }
 
-function startCartOrder(){
- if(cart.length)openForm([...cart]);
-}
+document.getElementById("pname").value=localStorage.getItem("pname")||"";
+document.getElementById("pnumber").value=localStorage.getItem("pnumber")||"";
+document.getElementById("savedAddress").value=localStorage.getItem("address")||"";
+document.getElementById("count").innerText=cart.length;
 
-function openForm(items){
- const total=items.reduce((s,p)=>s+p.price*p.qty,0);
- show(`<h2>📦 অর্ডার নিশ্চিত করুন</h2>
- <p>মোট পণ্য মূল্য: <b>৳${total}</b></p>
- <form id="orderForm">
- <label>আপনার নাম *</label>
- <input id="customerName" required placeholder="আপনার নাম লিখুন">
- <label>মোবাইল নম্বর *</label>
- <input id="customerPhone" required type="tel" placeholder="01XXXXXXXXX">
- <label>সম্পূর্ণ ঠিকানা *</label>
- <textarea id="customerAddress" required placeholder="গ্রাম, থানা, জেলা"></textarea>
- <label>পেমেন্ট পদ্ধতি</label>
- <select id="payment">
- <option>ক্যাশ অন ডেলিভারি</option>
- <option>বিকাশ - অর্ডার নিশ্চিত করার পর</option>
- <option>নগদ - অর্ডার নিশ্চিত করার পর</option>
- </select>
- <button class="sendbtn" type="submit">🟢 WhatsApp-এ অর্ডার পাঠান</button>
- </form>`);
-
- document.getElementById("orderForm").onsubmit=function(e){
- e.preventDefault();
-
- const name=document.getElementById("customerName").value.trim();
- const phone=document.getElementById("customerPhone").value.trim();
- const address=document.getElementById("customerAddress").value.trim();
- const payment=document.getElementById("payment").value;
-
- let orderDetails=items.map(p=>
- `${p.name} | ৳${p.price} × ${p.qty} = ৳${p.price*p.qty}`
- ).join("\n");
-
- const message=
- `🛍️ SMART BAZAR 24 - NEW ORDER\n\n`+
- `👤 ক্রেতার নাম: ${name}\n`+
- `📞 ফোন: ${phone}\n`+
- `📍 ঠিকানা: ${address}\n`+
- `💳 পেমেন্ট: ${payment}\n\n`+
- `📦 অর্ডারের পণ্য:\n${orderDetails}\n\n`+
- `💰 সর্বমোট: ৳${total}\n\n`+
- `দয়া করে আমার অর্ডারটি নিশ্চিত করুন।`;
-
- const url="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(message);
-
- // WhatsApp খুলবে; পাঠানোর আগে ক্রেতা মেসেজ দেখে Send চাপবেন।
- window.location.href=url;
-
- if(items.length===cart.length && items.every(p=>cart.some(c=>c.id===p.id))){
- cart=[];
- updateCount();
- }
- };
-}
-
-function showSettings(){
- show("<h2>⚙️ সেটিংস</h2><p>SMART BAZAR 24</p><p>ভাষা: বাংলা</p><p>দেশ: বাংলাদেশ</p><p>WhatsApp: +8801916-551788</p>");
-}
-
-function show(html){
- document.getElementById("modalContent").innerHTML=html;
- document.getElementById("modal").style.display="block";
-}
-
-function closeModal(){
- document.getElementById("modal").style.display="none";
-}
-
-render();
+renderProducts();
+renderCategories();
 </script>
-
 </body>
-  </html>
+ </html>
