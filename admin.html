@@ -1,159 +1,206 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SmartBazar BD - Admin Login</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f9;
-      display: grid;
-      place-items: center;
-      min-height: 100vh;
-    }
-    .box {
-      background: white;
-      width: 85%;
-      max-width: 380px;
-      padding: 25px;
-      border-radius: 15px;
-      box-shadow: 0 4px 20px #0002;
-    }
-    h2 { text-align: center; color: #168447; }
-    input, button {
-      box-sizing: border-box;
-      width: 100%;
-      padding: 13px;
-      margin: 9px 0;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    input { border: 1px solid #ccc; }
-    button {
-      border: 0;
-      background: #168447;
-      color: white;
-      font-weight: bold;
-    }
-    #message { text-align: center; color: #c0392b; }
-    #dashboard { display: none; text-align: center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMART BAZAR 24 - Admin</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;font-family:Arial,sans-serif;
+ background:#f1f5f9;min-height:100vh;
+ display:grid;place-items:center;padding:18px;
+}
+.box{
+ background:white;width:100%;max-width:480px;
+ padding:24px;border-radius:15px;
+ box-shadow:0 4px 20px #0002;
+}
+h2{text-align:center;color:#168447}
+input,textarea,button{
+ width:100%;padding:13px;margin:8px 0;
+ border-radius:8px;font-size:16px;
+}
+input,textarea{border:1px solid #ccc}
+textarea{min-height:90px}
+button{
+ border:0;background:#168447;
+ color:white;font-weight:bold;cursor:pointer;
+}
+#dashboard{display:none}
+#message,#productMessage{
+ text-align:center;overflow-wrap:anywhere;
+}
+</style>
 </head>
 <body>
-  <div class="box">
-    <h2>SmartBazar BD</h2>
-    <h3 id="heading">Admin Login</h3>
 
-    <div id="login">
-      <input id="email" type="email" placeholder="আপনার ইমেইল">
-      <input id="password" type="password" placeholder="পাসওয়ার্ড">
-      <button id="loginBtn">Login করুন</button>
-    </div>
-    
-      <div id="dashboard">
+<div class="box">
+<h2>🛍️ SMART BAZAR 24</h2>
+<h3 id="heading">Admin Login</h3>
+
+<div id="login">
+<input id="email" type="email" placeholder="আপনার ইমেইল">
+<input id="password" type="password" placeholder="পাসওয়ার্ড">
+<button id="loginBtn">Login করুন</button>
+</div>
+
+<div id="dashboard">
 <h3>নতুন পণ্য যোগ করুন</h3>
 
-<input id="productName" type="text" placeholder="পণ্যের নাম">
-
+<input id="productName" placeholder="পণ্যের নাম">
 <input id="productPrice" type="number" placeholder="পণ্যের দাম">
-
+<input id="productImage" type="url" placeholder="ছবির URL (ঐচ্ছিক)">
 <textarea id="productDescription" placeholder="পণ্যের বিবরণ"></textarea>
 
 <button id="saveProductBtn">পণ্য সংরক্ষণ করুন</button>
-
 <p id="productMessage"></p>
-      <h3>স্বাগতম, Super Admin!</h3>
-      <p>আপনার Admin Login সফল হয়েছে।</p>
-      <button id="logoutBtn">Logout</button>
-    </div>
 
-    <p id="message"></p>
-  </div>
+<hr>
+<h3>স্বাগতম, Super Admin!</h3>
+<button id="logoutBtn">Logout</button>
+</div>
 
-  <script type="module">
-    import { initializeApp } from
-      "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+<p id="message"></p>
+</div>
 
-    import { getAuth, signInWithEmailAndPassword, signOut }
-      from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+<script type="module">
 
-    import { getFirestore, doc, getDoc, addDoc, collection } 
-      from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
-      authDomain: "smart-bazar-24.firebaseapp.com",
-      projectId: "smart-bazar-24",
-      storageBucket: "smart-bazar-24.firebasestorage.app",
-      messagingSenderId: "100684524932",
-      appId: "1:100684524932:web:449afbb7e4d9f2ad2e81d1",
-      measurementId: "G-RGHK2GV9BC"
-    };
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+import {
+ getAuth,signInWithEmailAndPassword,
+ signOut,onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-    const message = document.getElementById("message");
+import {
+ getFirestore,doc,getDoc,
+ addDoc,collection,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-    document.getElementById("loginBtn").onclick = async () => {
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
-
-      message.textContent = "যাচাই করা হচ্ছে...";
-
-      try {
-        const result = await signInWithEmailAndPassword(
-          auth, email, password
-        );
-
-        const adminRef = doc(db, "admins", result.user.uid);
-        const adminSnap = await getDoc(adminRef);
-
-        if (!adminSnap.exists() ||
-            adminSnap.data().role !== "superadmin") {
-          await signOut(auth);
-          throw new Error("আপনার Admin অনুমতি নেই।");
-        }
-
-        document.getElementById("login").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        document.getElementById("heading").textContent = "Admin Dashboard";
-        message.textContent = "";
-
-      } catch (error) {
-        message.textContent = error.message;
-      }
-    };
-
-    document.getElementById("logoutBtn").onclick = async () => {
-      await signOut(auth);
-      location.reload();
-    };
-    document.getElementById("saveProductBtn").onclick = async () => {
-  const name = document.getElementById("productName").value.trim();
-  const price = Number(document.getElementById("productPrice").value);
-  const description = document.getElementById("productDescription").value.trim();
-  const message = document.getElementById("productMessage");
-
-  if (!name || !price || price <= 0) {
-    message.textContent = "পণ্যের নাম ও সঠিক দাম দিন।";
-    return;
-  }
-
-  try {
-    await addDoc(collection(db, "products"), {
-      name,
-      price,
-      description,
-      createdAt: new Date()
-    });
-    message.textContent = "পণ্য সফলভাবে সংরক্ষণ হয়েছে!";
-  } catch (error) {
-    message.textContent = "সমস্যা হয়েছে: " + error.message;
-  }
+const firebaseConfig = {
+ apiKey:"AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
+ authDomain:"smart-bazar-24.firebaseapp.com",
+ projectId:"smart-bazar-24",
+ storageBucket:"smart-bazar-24.firebasestorage.app",
+ messagingSenderId:"100684524932",
+ appId:"1:100684524932:web:449afbb7e4d9f2ad2e81d1",
+ measurementId:"G-RGHK2GV9BC"
 };
-  </script>
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const $=id=>document.getElementById(id);
+
+function showDashboard(){
+ $("login").style.display="none";
+ $("dashboard").style.display="block";
+ $("heading").textContent="Admin Dashboard";
+ $("message").textContent="";
+}
+
+$("loginBtn").onclick=async()=>{
+ const email=$("email").value.trim();
+ const password=$("password").value;
+
+ if(!email||!password){
+  $("message").textContent="ইমেইল ও পাসওয়ার্ড দিন।";
+  return;
+ }
+
+ $("message").textContent="যাচাই করা হচ্ছে...";
+
+ try{
+  const result=await signInWithEmailAndPassword(
+   auth,email,password
+  );
+
+  const adminSnap=await getDoc(
+   doc(db,"admins",result.user.uid)
+  );
+
+  if(!adminSnap.exists()||
+     adminSnap.data().role!=="superadmin"){
+   await signOut(auth);
+   throw new Error("আপনার Admin অনুমতি নেই।");
+  }
+
+  showDashboard();
+
+ }catch(error){
+  $("message").textContent=
+   "Login সমস্যা: "+error.message;
+ }
+};
+
+onAuthStateChanged(auth,async user=>{
+ if(!user)return;
+
+ try{
+  const snap=await getDoc(doc(db,"admins",user.uid));
+
+  if(snap.exists()&&
+     snap.data().role==="superadmin"){
+   showDashboard();
+  }
+ }catch(error){
+  $("message").textContent=error.message;
+ }
+});
+
+$("saveProductBtn").onclick=async()=>{
+
+ const name=$("productName").value.trim();
+ const price=Number($("productPrice").value);
+ const image=$("productImage").value.trim();
+ const description=$("productDescription").value.trim();
+
+ const msg=$("productMessage");
+
+ if(!name||!Number.isFinite(price)||price<=0){
+  msg.textContent="পণ্যের নাম ও সঠিক দাম দিন।";
+  return;
+ }
+
+ msg.textContent="সংরক্ষণ করা হচ্ছে...";
+
+ try{
+
+  const ref=await addDoc(
+   collection(db,"products"),
+   {
+    name:name,
+    price:price,
+    image:image,
+    description:description,
+    createdAt:serverTimestamp()
+   }
+  );
+
+  msg.textContent=
+   "পণ্য সফলভাবে সংরক্ষণ হয়েছে! ID: "+ref.id;
+
+  $("productName").value="";
+  $("productPrice").value="";
+  $("productImage").value="";
+  $("productDescription").value="";
+
+ }catch(error){
+
+  msg.textContent=
+   "সমস্যা: "+error.code+" - "+error.message;
+
+ }
+};
+
+$("logoutBtn").onclick=async()=>{
+ await signOut(auth);
+ location.reload();
+};
+
+</script>
 </body>
-  </html>
+</html>
