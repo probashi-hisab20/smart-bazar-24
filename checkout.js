@@ -1,3 +1,4 @@
+
 const WHATSAPP_NUMBER = "8801916551788";
 const CART_KEY = "smartBazarCart";
 
@@ -25,7 +26,7 @@ function escapeHTML(value) {
 
 function getOptions(item) {
   if (Array.isArray(item.options) && item.options.length) {
-    return item.options;
+    return item.options.map(option => String(option).trim()).filter(Boolean);
   }
 
   const name = String(item.name || "").toLowerCase();
@@ -64,8 +65,26 @@ function renderCheckout() {
     return;
   }
 
+  let cartChanged = false;
+
+  cart.forEach(item => {
+    const options = getOptions(item);
+
+    if (options.length && !options.includes(item.selectedOption)) {
+      item.selectedOption = options[0];
+      cartChanged = true;
+    }
+  });
+
+  if (cartChanged) saveCart(cart);
+
   container.innerHTML = cart.map(item => {
     const options = getOptions(item);
+
+    let optionLabel = "অপশন নির্বাচন করুন";
+    if (item.productType === "clothing") optionLabel = "সাইজ নির্বাচন করুন";
+    if (item.productType === "weight") optionLabel = "ওজন নির্বাচন করুন";
+    if (item.productType === "ring") optionLabel = "রিং সাইজ নির্বাচন করুন";
 
     return `
       <div style="padding:14px;border-bottom:1px solid #555">
@@ -76,7 +95,7 @@ function renderCheckout() {
         ${
           options.length
             ? `
-              <label>সাইজ / ওজন নির্বাচন করুন</label>
+              <label>${optionLabel}</label>
               <select data-option="${escapeHTML(item.id)}"
                 style="padding:10px;width:100%;margin:8px 0">
                 ${options.map(option => `
@@ -87,15 +106,13 @@ function renderCheckout() {
                 `).join("")}
               </select>
             `
-            : `<p>অতিরিক্ত সাইজ / ওজন প্রযোজ্য নয়</p>`
+            : `<p>এই পণ্যের জন্য কোনো সাইজ / ওজন যোগ করা হয়নি।</p>`
         }
 
         <p>পণ্যের সংখ্যা:</p>
 
         <button type="button" data-minus="${escapeHTML(item.id)}">−</button>
-
         <span style="padding:10px">${Number(item.quantity || 1)}</span>
-
         <button type="button" data-plus="${escapeHTML(item.id)}">+</button>
 
         <button type="button" data-remove="${escapeHTML(item.id)}">
