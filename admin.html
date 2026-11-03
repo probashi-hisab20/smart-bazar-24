@@ -52,7 +52,21 @@ button{
 <input id="productPrice" type="number" placeholder="পণ্যের দাম">
 <input id="productImage" type="url" placeholder="ছবির URL (ঐচ্ছিক)">
 <textarea id="productDescription" placeholder="পণ্যের বিবরণ"></textarea>
+<label>পণ্যের ধরন</label>
+<select id="productType">
+  <option value="normal">সাধারণ পণ্য</option>
+  <option value="clothing">পোশাক</option>
+  <option value="ring">রিং / আংটি</option>
+  <option value="weight">ওজন অনুযায়ী পণ্য</option>
+</select>
 
+<label>সাইজ / ওজনের অপশন</label>
+<input
+  id="productOptions"
+  type="text"
+  placeholder="যেমন: S, M, L, XL অথবা ১ কেজি, ২ কেজি"
+>
+<p>একাধিক অপশন দিতে কমা (,) ব্যবহার করবে।</p>
 <button id="saveProductBtn">পণ্য সংরক্ষণ করুন</button>
 <p id="productMessage"></p>
 
