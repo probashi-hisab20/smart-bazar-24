@@ -111,7 +111,38 @@ onSnapshot(collection(db, "products"), snapshot => {
 productGrid?.addEventListener("click", event => {
   const cartButton = event.target.closest("[data-cart]");
   const wishButton = event.target.closest("[data-wishlist]");
+const orderButton = event.target.closest("[data-order]");
 
+if (orderButton) {
+  const product = products.find(
+    item => item.id === orderButton.dataset.order
+  );
+
+  if (!product) return;
+
+  const cart = JSON.parse(
+    localStorage.getItem("smartBazarCart") || "[]"
+  );
+
+  const existing = cart.find(item => item.id === product.id);
+
+  if (existing) {
+    existing.quantity = Number(existing.quantity || 1) + 1;
+  } else {
+    cart.push({
+      id: product.id,
+      name: product.name,
+      price: Number(product.price) || 0,
+      image: product.image,
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem("smartBazarCart", JSON.stringify(cart));
+  updateCartCount();
+  window.location.href = "checkout.html";
+  return;
+      }
   if (cartButton) {
     const product = products.find(item => item.id === cartButton.dataset.cart);
     if (!product) return;
