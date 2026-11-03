@@ -65,9 +65,20 @@ function renderProducts() {
               ? `<span class="old-price">৳ ${oldPrice.toLocaleString("en-US")}</span>`
               : ""}
           </div>
-          <div class="product-actions">
-            <button type="button" data-cart="${safe(product.id)}">কার্টে রাখুন</button>
-            <button type="button" data-wishlist="${safe(product.id)}">♡</button>
+          <div class="product-actions" style="flex-wrap:wrap">
+  <button type="button" data-cart="${safe(product.id)}">
+    কার্টে রাখুন
+  </button>
+
+  <button type="button" data-wishlist="${safe(product.id)}">
+    ♡
+  </button>
+
+  <button type="button" data-order="${safe(product.id)}"
+    style="flex-basis:100%;background:#d9ad50;color:#111">
+    এখনই অর্ডার করুন
+  </button>
+</div>
           </div>
         </div>
       </article>
