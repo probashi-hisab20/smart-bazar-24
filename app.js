@@ -95,11 +95,12 @@ onSnapshot(collection(db, "products"), snapshot => {
       name: getProduct(data, ["name", "title", "productName"], "নাম নেই"),
       price: getProduct(data, ["price", "sellingPrice", "salePrice"], 0),
       oldPrice: getProduct(data, ["oldPrice", "originalPrice"], 0),
-      image: getProduct(data, ["image", "imageUrl", "photo", "photoURL"], "")
+      image: getProduct(data, ["image", "imageUrl", "photo", "photoURL"], ""),
+        productType: getProduct(data, ["productType"], "normal"),
+options: getProduct(data, ["options"], [])
     };
   });
-
-  renderProducts();
+ renderProducts();
 }, error => {
   console.error("Product loading error:", error);
   if (productGrid) {
