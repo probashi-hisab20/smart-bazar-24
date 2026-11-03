@@ -1,1 +1,362 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMART BAZAR 24</title>
 
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f6fa;
+      color: #222;
+    }
+    header {
+      background: #101827;
+      color: white;
+      padding: 18px;
+      text-align: center;
+    }
+    header h1 { margin: 0; color: #f5c542; }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      padding: 12px;
+      background: #fff;
+      flex-wrap: wrap;
+    }
+    nav a { color: #101827; text-decoration: none; font-weight: bold; }
+    .container { padding: 16px; max-width: 1100px; margin: auto; }
+    .hero {
+      background: #101827;
+      color: white;
+      padding: 35px 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    .hero h2 { color: #f5c542; }
+    button {
+      border: 0;
+      padding: 11px 16px;
+      background: #f5c542;
+      color: #101827;
+      border-radius: 7px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border: 1px solid #ddd;
+      border-radius: 7px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 12px 0;
+      box-shadow: 0 2px 8px #0001;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(145px,1fr));
+      gap: 12px;
+    }
+    .product {
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 130px;
+      object-fit: contain;
+    }
+    .hidden { display: none; }
+    footer {
+      background: #101827;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>SMART BAZAR 24</h1>
+  <p>আপনার বিশ্বস্ত অনলাইন শপ</p>
+</header>
+
+<nav>
+  <a href="#home">হোম</a>
+  <a href="#products">প্রোডাক্ট</a>
+  <a href="#account">আমার অ্যাকাউন্ট</a>
+  <a href="#orders">আমার অর্ডার</a>
+  <a href="#support">সাপোর্ট</a>
+</nav>
+
+<div class="container">
+
+  <section class="hero" id="home">
+    <h2>SMART BAZAR 24-এ স্বাগতম</h2>
+    <p>সেরা পণ্য, সহজ কেনাকাটা এবং নির্ভরযোগ্য সেবা।</p>
+    <button onclick="document.getElementById('products').scrollIntoView()">
+      কেনাকাটা করুন
+    </button>
+  </section>
+
+  <section id="products">
+    <h2>আমাদের প্রোডাক্ট</h2>
+    <input id="search" placeholder="প্রোডাক্ট খুঁজুন..." oninput="showProducts()">
+    <div id="productList" class="products">
+      <p>প্রোডাক্ট লোড হচ্ছে...</p>
+    </div>
+  </section>
+
+  <section class="card" id="account">
+    <h2>কাস্টমার অ্যাকাউন্ট</h2>
+    <input id="email" type="email" placeholder="আপনার ইমেইল">
+    <input id="password" type="password" placeholder="পাসওয়ার্ড">
+    <button onclick="register()">রেজিস্ট্রেশন</button>
+    <button onclick="login()">লগইন</button>
+    <button onclick="logout()">লগআউট</button>
+    <button onclick="resetPassword()">পাসওয়ার্ড ভুলে গেছেন?</button>
+    <p id="accountStatus">আপনি লগইন করেননি।</p>
+  </section>
+
+  <section class="card" id="orders">
+    <h2>আমার অর্ডার</h2>
+    <div id="orderList">লগইন করলে অর্ডার দেখতে পারবেন।</div>
+  </section>
+
+  <section class="card" id="support">
+    <h2>লাইভ সাপোর্ট</h2>
+    <div id="messages"></div>
+    <input id="chatMessage" placeholder="আপনার মেসেজ লিখুন...">
+    <button onclick="sendMessage()">মেসেজ পাঠান</button>
+  </section>
+
+</div>
+
+<footer>
+  <h3>SMART BAZAR 24</h3>
+  <p>ধন্যবাদ আমাদের সাথে থাকার জন্য।</p>
+</footer>
+
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+
+import {
+  getAuth, createUserWithEmailAndPassword,
+  signInWithEmailAndPassword, signOut,
+  sendPasswordResetEmail, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+import {
+  getFirestore, collection, onSnapshot,
+  addDoc, query, where, orderBy, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
+  authDomain: "smart-bazar-24.firebaseapp.com",
+  projectId: "smart-bazar-24",
+  storageBucket: "smart-bazar-24.firebasestorage.app",
+  messagingSenderId: "100684524932",
+  appId: "1:100684524932:web:449afbb7e4d9f2ad2e81d1",
+  measurementId: "G-RGHK2GV9BC"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let allProducts = [];
+
+window.register = async () => {
+  try {
+    await createUserWithEmailAndPassword(
+      auth,
+      document.getElementById("email").value,
+      document.getElementById("password").value
+    );
+    alert("রেজিস্ট্রেশন সফল হয়েছে!");
+  } catch (e) { alert(e.message); }
+};
+
+window.login = async () => {
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      document.getElementById("email").value,
+      document.getElementById("password").value
+    );
+    alert("লগইন সফল হয়েছে!");
+  } catch (e) { alert(e.message); }
+};
+
+window.logout = async () => {
+  await signOut(auth);
+  alert("লগআউট হয়েছে");
+};
+
+window.resetPassword = async () => {
+  try {
+    await sendPasswordResetEmail(
+      auth, document.getElementById("email").value
+    );
+    alert("পাসওয়ার্ড রিসেট লিংক ইমেইলে পাঠানো হয়েছে।");
+  } catch (e) { alert(e.message); }
+};
+
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  document.getElementById("accountStatus").textContent =
+    user ? "লগইন: " + user.email : "আপনি লগইন করেননি।";
+  loadOrders();
+  loadMessages();
+});
+
+onSnapshot(collection(db, "products"), snapshot => {
+  allProducts = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
+  showProducts();
+});
+
+window.showProducts = () => {
+  const search = document.getElementById("search").value.toLowerCase();
+  const list = document.getElementById("productList");
+  const filtered = allProducts.filter(p =>
+    (p.name || "").toLowerCase().includes(search)
+  );
+
+  list.innerHTML = "";
+
+  filtered.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "product";
+
+    const img = document.createElement("img");
+    img.src = p.image || "";
+    img.alt = p.name || "প্রোডাক্ট";
+
+    const name = document.createElement("h3");
+    name.textContent = p.name || "প্রোডাক্ট";
+
+    const price = document.createElement("p");
+    price.textContent = "৳ " + (p.price || 0);
+
+    const btn = document.createElement("button");
+    btn.textContent = "অর্ডার করুন";
+    btn.onclick = () => placeOrder(p);
+
+    item.append(img, name, price, btn);
+    list.appendChild(item);
+  });
+
+  if (!filtered.length) list.textContent = "কোনো প্রোডাক্ট পাওয়া যায়নি।";
+};
+
+async function placeOrder(product) {
+  if (!currentUser) return alert("অর্ডার করতে আগে লগইন করুন।");
+
+  const phone = prompt("আপনার মোবাইল নম্বর দিন:");
+  const address = prompt("আপনার ডেলিভারি ঠিকানা দিন:");
+  if (!phone || !address) return;
+
+  try {
+    await addDoc(collection(db, "orders"), {
+      uid: currentUser.uid,
+      email: currentUser.email,
+      productName: product.name || "",
+      price: Number(product.price || 0),
+      phone,
+      address,
+      status: "Pending",
+      createdAt: serverTimestamp()
+    });
+    alert("আপনার অর্ডার গ্রহণ করা হয়েছে!");
+    loadOrders();
+  } catch (e) { alert(e.message); }
+}
+
+window.loadOrders = () => {
+  const list = document.getElementById("orderList");
+  if (!currentUser) {
+    list.textContent = "অর্ডার দেখতে লগইন করুন।";
+    return;
+  }
+
+  const q = query(
+    collection(db, "orders"),
+    where("uid", "==", currentUser.uid)
+  );
+
+  onSnapshot(q, snapshot => {
+    list.innerHTML = "";
+    snapshot.forEach(d => {
+      const order = d.data();
+      const div = document.createElement("p");
+      div.textContent =
+        `${order.productName} — ৳${order.price} — ${order.status}`;
+      list.appendChild(div);
+    });
+  });
+};
+
+window.sendMessage = async () => {
+  if (!currentUser) return alert("আগে লগইন করুন।");
+  const message = document.getElementById("chatMessage").value.trim();
+  if (!message) return;
+
+  try {
+    await addDoc(collection(db, "chats", currentUser.uid, "messages"), {
+      uid: currentUser.uid,
+      sender: "customer",
+      message,
+      createdAt: serverTimestamp()
+    });
+    document.getElementById("chatMessage").value = "";
+    loadMessages();
+  } catch (e) { alert(e.message); }
+};
+
+let stopMessages = null;
+
+function loadMessages() {
+  if (stopMessages) stopMessages();
+
+  const box = document.getElementById("messages");
+  if (!currentUser) {
+    box.textContent = "লাইভ সাপোর্ট ব্যবহার করতে লগইন করুন।";
+    return;
+  }
+
+  const q = query(
+    collection(db, "chats", currentUser.uid, "messages"),
+    orderBy("createdAt")
+  );
+
+  stopMessages = onSnapshot(q, snapshot => {
+    box.innerHTML = "";
+    snapshot.forEach(d => {
+      const p = document.createElement("p");
+      p.textContent = (d.data().sender === "admin" ? "সাপোর্ট: " : "আপনি: ")
+        + d.data().message;
+      box.appendChild(p);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
