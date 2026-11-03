@@ -1,4 +1,3 @@
-
 const WHATSAPP_NUMBER = "8801916551788";
 const CART_KEY = "smartBazarCart";
 
