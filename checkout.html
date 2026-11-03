@@ -1,1 +1,83 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - SMART BAZAR 24</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .checkout-box {
+      max-width: 750px;
+      margin: 35px auto;
+      padding: 22px;
+      background: #111722;
+      border: 1px solid rgba(217,173,80,.35);
+      border-radius: 16px;
+    }
+    .checkout-box h1 {
+      color: #f6d98b;
+      margin-bottom: 20px;
+    }
+    .checkout-box label {
+      display: block;
+      margin: 14px 0 6px;
+    }
+    .checkout-box input,
+    .checkout-box textarea {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background: #080b12;
+      color: white;
+    }
+    .checkout-box textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .checkout-box button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 8px;
+      background: #d9ad50;
+      color: #111;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">SMART BAZAR 24 - নিরাপদ কেনাকাটা</div>
+
+  <main class="container">
+    <div class="checkout-box">
+      <h1>অর্ডার সম্পন্ন করুন</h1>
+
+      <h3>আপনার কার্ট</h3>
+      <div id="checkoutItems"></div>
+
+      <form id="checkoutForm">
+        <label for="customerName">আপনার নাম</label>
+        <input id="customerName" type="text" required placeholder="আপনার নাম লিখুন">
+
+        <label for="customerPhone">মোবাইল নম্বর</label>
+        <input id="customerPhone" type="tel" required placeholder="মোবাইল নম্বর লিখুন">
+
+        <label for="customerAddress">সম্পূর্ণ ঠিকানা</label>
+        <textarea id="customerAddress" required placeholder="আপনার ঠিকানা লিখুন"></textarea>
+
+        <button type="submit">WhatsApp-এ অর্ডার পাঠান</button>
+      </form>
+
+      <p style="margin-top:15px">
+        <a href="preview.html" style="color:#f6d98b">← কেনাকাটায় ফিরে যান</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
+
