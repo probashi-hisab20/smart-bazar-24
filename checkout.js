@@ -3,7 +3,11 @@ const WHATSAPP_NUMBER = "8801916551788";
 const CART_KEY = "smartBazarCart";
 
 function getCart() {
-  return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  try {
+    return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+  } catch {
+    return [];
+  }
 }
 
 function saveCart(cart) {
@@ -20,27 +24,32 @@ function escapeHTML(value) {
   })[char]);
 }
 
-function getOptions(name) {
-  const n = String(name).toLowerCase();
+function getOptions(item) {
+  if (Array.isArray(item.options) && item.options.length) {
+    return item.options;
+  }
 
-  if (/চাল|rice/.test(n)) {
+  const name = String(item.name || "").toLowerCase();
+
+  if (/চাল|rice/.test(name)) {
     return ["১ কেজি", "২ কেজি", "৫ কেজি", "১০ কেজি"];
   }
 
-  if (/রিং|আংটি|ring/.test(n)) {
+  if (/রিং|আংটি|ring/.test(name)) {
     return ["সাইজ ৬", "সাইজ ৭", "সাইজ ৮", "সাইজ ৯", "সাইজ ১০", "সাইজ ১১"];
   }
 
-  if (/শার্ট|জামা|প্যান্ট|টি-শার্ট|shirt|pant|t-shirt|dress|কাপড়/.test(n)) {
+  if (/শার্ট|জামা|প্যান্ট|টি-শার্ট|shirt|pant|t-shirt|dress|কাপড়/.test(name)) {
     return ["S", "M", "L", "XL", "XXL"];
   }
 
-  return ["প্রযোজ্য নয়"];
+  return [];
 }
 
 function calculateTotal(cart) {
   return cart.reduce(
-    (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1),
+    (sum, item) =>
+      sum + Number(item.price || 0) * Number(item.quantity || 1),
     0
   );
 }
@@ -57,38 +66,49 @@ function renderCheckout() {
   }
 
   container.innerHTML = cart.map(item => {
-    const options = getOptions(item.name);
+    const options = getOptions(item);
 
     return `
       <div style="padding:14px;border-bottom:1px solid #555">
         <strong>${escapeHTML(item.name)}</strong>
-        <p>দাম: ৳${Number(item.price || 0)}</p>
 
-        <label>সাইজ / পরিমাণ নির্বাচন করুন</label>
-        <select data-option="${escapeHTML(item.id)}"
-          style="padding:10px;width:100%;margin:8px 0">
-          ${options.map(option => `
-            <option value="${escapeHTML(option)}"
-              ${item.selectedOption === option ? "selected" : ""}>
-              ${escapeHTML(option)}
-            </option>
-          `).join("")}
-        </select>
+        <p>দাম: ৳${Number(item.price || 0).toLocaleString("en-US")}</p>
+
+        ${
+          options.length
+            ? `
+              <label>সাইজ / ওজন নির্বাচন করুন</label>
+              <select data-option="${escapeHTML(item.id)}"
+                style="padding:10px;width:100%;margin:8px 0">
+                ${options.map(option => `
+                  <option value="${escapeHTML(option)}"
+                    ${item.selectedOption === option ? "selected" : ""}>
+                    ${escapeHTML(option)}
+                  </option>
+                `).join("")}
+              </select>
+            `
+            : `<p>অতিরিক্ত সাইজ / ওজন প্রযোজ্য নয়</p>`
+        }
 
         <p>পণ্যের সংখ্যা:</p>
+
         <button type="button" data-minus="${escapeHTML(item.id)}">−</button>
-        <span>${Number(item.quantity || 1)}</span>
+
+        <span style="padding:10px">${Number(item.quantity || 1)}</span>
+
         <button type="button" data-plus="${escapeHTML(item.id)}">+</button>
-        <button type="button" data-remove="${escapeHTML(item.id)}">বাদ দিন</button>
+
+        <button type="button" data-remove="${escapeHTML(item.id)}">
+          বাদ দিন
+        </button>
       </div>
     `;
   }).join("");
 
-  const total = calculateTotal(cart);
-
   container.insertAdjacentHTML("beforeend", `
     <div style="padding:15px">
-      <h3>সর্বমোট: ৳${total.toLocaleString("en-US")}</h3>
+      <h3>সর্বমোট: ৳${calculateTotal(cart).toLocaleString("en-US")}</h3>
     </div>
   `);
 }
@@ -96,9 +116,11 @@ function renderCheckout() {
 function changeQuantity(id, amount) {
   const cart = getCart();
   const item = cart.find(p => p.id === id);
+
   if (!item) return;
 
   item.quantity = Math.max(1, Number(item.quantity || 1) + amount);
+
   saveCart(cart);
   renderCheckout();
 }
@@ -112,9 +134,17 @@ document.getElementById("checkoutItems")?.addEventListener("click", event => {
   const button = event.target.closest("button");
   if (!button) return;
 
-  if (button.dataset.plus) changeQuantity(button.dataset.plus, 1);
-  if (button.dataset.minus) changeQuantity(button.dataset.minus, -1);
-  if (button.dataset.remove) removeCartItem(button.dataset.remove);
+  if (button.dataset.plus) {
+    changeQuantity(button.dataset.plus, 1);
+  }
+
+  if (button.dataset.minus) {
+    changeQuantity(button.dataset.minus, -1);
+  }
+
+  if (button.dataset.remove) {
+    removeCartItem(button.dataset.remove);
+  }
 });
 
 document.getElementById("checkoutItems")?.addEventListener("change", event => {
@@ -123,6 +153,7 @@ document.getElementById("checkoutItems")?.addEventListener("change", event => {
 
   const cart = getCart();
   const item = cart.find(p => p.id === select.dataset.option);
+
   if (!item) return;
 
   item.selectedOption = select.value;
@@ -149,6 +180,7 @@ function sendOrderToWhatsApp(event) {
   }
 
   const total = calculateTotal(cart);
+
   const lines = [
     "SMART BAZAR 24 - NEW ORDER",
     "",
@@ -173,7 +205,8 @@ function sendOrderToWhatsApp(event) {
     `ঠিকানা: ${address}`
   );
 
-  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+  const url =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
 
   window.location.href = url;
 }
