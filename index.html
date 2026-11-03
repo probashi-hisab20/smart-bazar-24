@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMART BAZAR 24</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f3f5fa;color:#202b3c;font-family:Arial,sans-serif}
 header{background:#102e57;color:white;padding:17px;text-align:center}
 header h2{margin:0;font-size:25px}
 header p{margin:6px}
-nav{position:sticky;top:0;z-index:10;background:white;display:flex;justify-content:space-around;padding:12px 3px;box-shadow:0 2px 8px #ddd}
+nav{position:sticky;top:0;z-index:10;background:white;display:flex;justify-content:space-around;padding:12px 3px;box-shadow:0 2px 8px #ddd;gap:3px}
 button{border:0;border-radius:8px;padding:11px 14px;background:#123c70;color:white;cursor:pointer}
-nav button{background:#edf2f8;color:#123c70;padding:10px}
+nav button{background:#edf2f8;color:#123c70;padding:10px 7px;font-size:12px}
 main{max-width:950px;margin:auto;padding:14px}
 .page{display:none}
 .page.active{display:block}
@@ -34,9 +35,11 @@ input,textarea,select{width:100%;padding:13px;border:1px solid #ddd;border-radiu
 footer{text-align:center;padding:25px;color:#777}
 .back{background:#66768b;margin-bottom:12px}
 button:active{opacity:.7}
+.status{text-align:center;padding:12px;color:#555}
 @media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -53,25 +56,25 @@ button:active{opacity:.7}
 
 <main>
 
-<!-- HOME -->
 <section id="home" class="page active">
 <div class="banner">
 <h1>SMART BAZAR 24</h1>
 <p>সবকিছু এক জায়গায়, কেনাকাটা হোক সহজ ও আনন্দময়!</p>
 <p>Shop Everything • Anytime • Anywhere</p>
 </div>
+
 <input id="search" placeholder="🔍 পণ্য খুঁজুন..." oninput="renderProducts()">
+
 <h3>🔥 জনপ্রিয় পণ্য</h3>
+<div id="productStatus" class="status">পণ্য লোড হচ্ছে...</div>
 <div class="grid" id="products"></div>
 </section>
 
-<!-- CATEGORIES -->
 <section id="categories" class="page">
 <h3>🛍️ পণ্যের ক্যাটাগরি</h3>
 <div class="grid" id="categoryList"></div>
 </section>
 
-<!-- CART -->
 <section id="cart" class="page">
 <h3>🛒 আমার শপিং কার্ট</h3>
 <div id="cartItems"></div>
@@ -79,7 +82,6 @@ button:active{opacity:.7}
 <button class="green" onclick="checkout()">অর্ডার করুন</button>
 </section>
 
-<!-- CHECKOUT -->
 <section id="checkout" class="page">
 <h3>📦 অর্ডার সম্পন্ন করুন</h3>
 <div class="panel">
@@ -101,7 +103,6 @@ button:active{opacity:.7}
 </div>
 </section>
 
-<!-- SETTINGS -->
 <section id="settings" class="page">
 <h3>⚙️ সেটিংস</h3>
 <div class="setting" onclick="show('account')">👤 <b>My Account / আমার অ্যাকাউন্ট</b> ›</div>
@@ -122,7 +123,6 @@ button:active{opacity:.7}
 <button onclick="show('home')">হোম পেজে ফিরে যান</button>
 </section>
 
-<!-- ACCOUNT -->
 <section id="account" class="page panel">
 <h3>👤 My Account</h3>
 <div id="accountInfo">আপনার প্রোফাইল তথ্য এখানে দেখাবে।</div>
@@ -215,10 +215,32 @@ button:active{opacity:.7}
 
 <footer>© 2026 SMART BAZAR 24<br>All Rights Reserved</footer>
 
-<script>
-const WA="8801916551788";
+<script type="module">
 
-const products=[
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+const WA = "8801916551788";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
+  authDomain: "smart-bazar-24.firebaseapp.com",
+  projectId: "smart-bazar-24",
+  storageBucket: "smart-bazar-24.firebasestorage.app",
+  messagingSenderId: "100684524932",
+  appId: "1:100684524932:web:449afbb7e4d9f2ad2e81d1",
+  measurementId: "G-RGHK2GV9BC"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const demoProducts = [
 ["মেয়েদের থ্রি-পিস",850,"https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=500"],
 ["ছেলেদের টি-শার্ট",450,"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"],
 ["ফ্যাশন জুতা",950,"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"],
@@ -233,147 +255,524 @@ const products=[
 ["স্পোর্টস জুতা",1250,"https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500"]
 ];
 
-const categories=["মেয়েদের পোশাক","ছেলেদের পোশাক","জুতা","কসমেটিকস","ইলেকট্রনিকস","ব্যাগ","ঘড়ি","ঘর ও রান্নাঘর"];
-let cart=JSON.parse(localStorage.getItem("cart")||"[]");
-let wishlist=JSON.parse(localStorage.getItem("wishlist")||"[]");
+const categories = [
+"মেয়েদের পোশাক",
+"ছেলেদের পোশাক",
+"জুতা",
+"কসমেটিকস",
+"ইলেকট্রনিকস",
+"ব্যাগ",
+"ঘড়ি",
+"ঘর ও রান্নাঘর"
+];
 
-function show(id){
-document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-if(id==="cart")renderCart();
-if(id==="orders")renderOrders();
-if(id==="wishlist")renderWishlist();
-if(id==="account")renderAccount();
-window.scrollTo(0,0);
-}
-
-function renderProducts(){
-let q=document.getElementById("search").value.toLowerCase();
-document.getElementById("products").innerHTML=products.map((p,i)=>({p,i})).filter(x=>x.p[0].toLowerCase().includes(q)).map(({p,i})=>`
-<div class="card">
-<img src="${p[2]}" alt="${p[0]}" loading="lazy">
-<h4>${p[0]}</h4>
-<div class="price">৳${p[1]}</div>
-<div class="actions">
-<button onclick="addCart(${i})">কার্টে যোগ</button>
-<button class="green" onclick="buy(${i})">অর্ডার করুন</button>
-<button class="orange" onclick="addWish(${i})">♡</button>
-</div>
-</div>`).join("");
+function demoList(){
+return demoProducts.map((p,i)=>({
+id:"demo-"+i,
+name:p[0],
+price:p[1],
+image:p[2],
+description:""
+}));
 }
 
-function renderCategories(){
-document.getElementById("categoryList").innerHTML=categories.map(c=>`
-<div class="setting" onclick="filterCategory('${c}')">${c} <span>›</span></div>`).join("");
+let products=demoList();
+let activeCategory="";
+let cart=[];
+let wishlist=[];
+
+function readStorage(key){
+try{
+return JSON.parse(localStorage.getItem(key)||"[]");
+}catch(e){
+return [];
 }
-function filterCategory(c){
-document.getElementById("search").value="";
-show("home");
-renderProducts();
-alert(c+" ক্যাটাগরি বাছাই করা হয়েছে। সব পণ্য দেখতে হোমে যান।");
 }
 
-function addCart(i){
-cart.push(i);
-saveCart();
-alert("পণ্য কার্টে যোগ হয়েছে");
+function migrateIds(items){
+return items.map(i=>
+typeof i==="number"?"demo-"+i:String(i)
+);
 }
+
+cart=migrateIds(readStorage("cart"));
+wishlist=migrateIds(readStorage("wishlist"));
+
+function getProduct(id){
+return products.find(p=>p.id===id);
+}
+
+function safeText(value){
+return String(value??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+})[c]);
+}
+
+function safeImage(url){
+const value=String(url||"");
+return /^https?:\/\//i.test(value)
+? safeText(value)
+: "https://placehold.co/500x400?text=SMART+BAZAR+24";
+}
+
+function inferCategory(name){
+const n=name.toLowerCase();
+
+if(n.includes("থ্রি-পিস")||n.includes("ড্রেস")||n.includes("শাড়ি"))
+return "মেয়েদের পোশাক";
+
+if(n.includes("টি-শার্ট")||n.includes("শার্ট")||n.includes("প্যান্ট"))
+return "ছেলেদের পোশাক";
+
+if(n.includes("জুতা")||n.includes("শু"))
+return "জুতা";
+
+if(n.includes("কসমেটিক")||n.includes("লিপস্টিক")||n.includes("ক্রিম"))
+return "কসমেটিকস";
+
+if(n.includes("ফোন")||n.includes("মোবাইল")||n.includes("ল্যাপটপ"))
+return "ইলেকট্রনিকস";
+
+if(n.includes("ব্যাগ"))
+return "ব্যাগ";
+
+if(n.includes("ঘড়ি"))
+return "ঘড়ি";
+
+if(n.includes("কিচেন")||n.includes("রান্না"))
+return "ঘর ও রান্নাঘর";
+
+return "";
+}
+
 function saveCart(){
 localStorage.setItem("cart",JSON.stringify(cart));
 document.getElementById("count").innerText=cart.length;
 }
-function renderCart(){
-let total=0;
-document.getElementById("cartItems").innerHTML=cart.map((i,n)=>{
-let p=products[i];total+=p[1];
-return `<div class="setting">${p[0]} — ৳${p[1]} <button onclick="removeCart(${n})">বাদ দিন</button></div>`;
-}).join("")||"আপনার কার্ট খালি।";
-document.getElementById("total").innerText="মোট: ৳"+total;
+
+function loadProducts(){
+
+onSnapshot(
+collection(db,"products"),
+
+snapshot=>{
+
+const remoteProducts=snapshot.docs.map(doc=>{
+const d=doc.data();
+
+return {
+id:doc.id,
+name:String(d.name||""),
+price:Number(d.price)||0,
+image:d.image||"",
+description:d.description||"",
+category:inferCategory(String(d.name||""))
+};
+
+}).filter(p=>p.name);
+
+products=remoteProducts.length
+?remoteProducts
+:demoList();
+
+cart=cart.filter(id=>getProduct(id));
+wishlist=wishlist.filter(id=>getProduct(id));
+
+saveCart();
+
+localStorage.setItem("wishlist",JSON.stringify(wishlist));
+
+document.getElementById("productStatus").innerText=
+remoteProducts.length
+?"✅ Admin Panel-এর পণ্য দেখানো হচ্ছে"
+:"এখনো Admin Panel-এ পণ্য যোগ করা হয়নি।";
+
+renderProducts();
+renderCategories();
+renderCart();
+renderWishlist();
+
+},
+
+error=>{
+
+console.error("Firebase Error:",error);
+
+document.getElementById("productStatus").innerText=
+"Firebase সংযোগ সমস্যা। Database Rules পরীক্ষা করুন।";
+
+renderProducts();
+
 }
-function removeCart(n){cart.splice(n,1);saveCart();renderCart();}
-function buy(i){cart=[i];saveCart();show("checkout");}
-function checkout(){
-if(!cart.length){alert("আগে পণ্য কার্টে যোগ করুন");return;}
+);
+
+}
+
+function show(id){
+
+document.querySelectorAll(".page").forEach(x=>
+x.classList.remove("active")
+);
+
+document.getElementById(id).classList.add("active");
+
+if(id==="cart")renderCart();
+if(id==="orders")renderOrders();
+if(id==="wishlist")renderWishlist();
+if(id==="account")renderAccount();
+
+window.scrollTo(0,0);
+
+}
+
+function renderProducts(){
+
+const q=document.getElementById("search").value.toLowerCase();
+
+const filtered=products.filter(p=>
+p.name.toLowerCase().includes(q)&&
+(!activeCategory||p.category===activeCategory)
+);
+
+document.getElementById("products").innerHTML=
+filtered.map(p=>`
+
+<div class="card">
+
+<img src="${safeImage(p.image)}"
+alt="${safeText(p.name)}"
+loading="lazy">
+
+<h4>${safeText(p.name)}</h4>
+
+<div class="price">৳${p.price}</div>
+
+${p.description?
+`<p>${safeText(p.description)}</p>`:""}
+
+<div class="actions">
+
+<button onclick="addCart('${safeText(p.id)}')">
+কার্টে যোগ
+</button>
+
+<button class="green"
+onclick="buy('${safeText(p.id)}')">
+অর্ডার করুন
+</button>
+
+<button class="orange"
+onclick="addWish('${safeText(p.id)}')">
+♡
+</button>
+
+</div>
+</div>
+
+`).join("")||"<p>কোনো পণ্য পাওয়া যায়নি।</p>";
+
+}
+
+function renderCategories(){
+
+document.getElementById("categoryList").innerHTML=
+categories.map(c=>`
+
+<div class="setting"
+onclick="filterCategory('${safeText(c)}')">
+${safeText(c)}
+<span>›</span>
+</div>
+
+`).join("");
+
+}
+
+function filterCategory(c){
+
+activeCategory=c;
+document.getElementById("search").value="";
+
+show("home");
+renderProducts();
+
+}
+
+function addCart(id){
+
+if(!getProduct(id))return;
+
+cart.push(id);
+saveCart();
+
+alert("পণ্য কার্টে যোগ হয়েছে");
+
+}
+
+function renderCart(){
+
+let total=0;
+
+document.getElementById("cartItems").innerHTML=
+cart.map((id,n)=>{
+
+const p=getProduct(id);
+if(!p)return "";
+
+total+=p.price;
+
+return `
+
+<div class="setting">
+
+${safeText(p.name)} — ৳${p.price}
+
+<button onclick="removeCart(${n})">
+বাদ দিন
+</button>
+
+</div>
+
+`;
+
+}).join("")||"আপনার কার্ট খালি।";
+
+document.getElementById("total").innerText="মোট: ৳"+total;
+
+}
+
+function removeCart(n){
+
+cart.splice(n,1);
+saveCart();
+renderCart();
+
+}
+
+function buy(id){
+
+if(!getProduct(id))return;
+
+cart=[id];
+saveCart();
 show("checkout");
+
+}
+
+function checkout(){
+
+if(!cart.length){
+alert("আগে পণ্য কার্টে যোগ করুন");
+return;
+}
+
+show("checkout");
+
 }
 
 function whatsapp(msg){
-window.open("https://wa.me/"+WA+"?text="+encodeURIComponent(msg),"_blank");
+
+window.open(
+"https://wa.me/"+WA+"?text="+encodeURIComponent(msg),
+"_blank"
+);
+
 }
 
 function placeOrder(){
-let name=document.getElementById("customer").value.trim();
-let phone=document.getElementById("phone").value.trim();
-let address=document.getElementById("address").value.trim();
+
+const name=document.getElementById("customer").value.trim();
+const phone=document.getElementById("phone").value.trim();
+const address=document.getElementById("address").value.trim();
+
 if(!name||!phone||!address||!cart.length){
 alert("নাম, ফোন, ঠিকানা ও পণ্য পূরণ করুন");
 return;
 }
-let total=cart.reduce((s,i)=>s+products[i][1],0);
-let method=document.getElementById("payment").value;
-let trx=document.getElementById("trx").value;
-let message="SMART BAZAR 24 ORDER\nনাম: "+name+
-"\nফোন: "+phone+"\nঠিকানা: "+address+
-"\nপেমেন্ট: "+method+"\nTrxID: "+trx+
-"\nপণ্য:\n"+cart.map(i=>products[i][0]+" ৳"+products[i][1]).join("\n")+
+
+const items=cart.map(getProduct).filter(Boolean);
+
+const total=items.reduce((s,p)=>s+p.price,0);
+
+const method=document.getElementById("payment").value;
+const trx=document.getElementById("trx").value;
+
+const message=
+"SMART BAZAR 24 ORDER\n"+
+"নাম: "+name+
+"\nফোন: "+phone+
+"\nঠিকানা: "+address+
+"\nপেমেন্ট: "+method+
+"\nTrxID: "+trx+
+"\nপণ্য:\n"+
+items.map(p=>p.name+" ৳"+p.price).join("\n")+
 "\nমোট: ৳"+total;
 
-let orders=JSON.parse(localStorage.getItem("orders")||"[]");
-orders.push({name,phone,address,total,method,items:cart.map(i=>products[i][0]),date:new Date().toLocaleString()});
+let orders=readStorage("orders");
+
+orders.push({
+name,
+phone,
+address,
+total,
+method,
+items:items.map(p=>p.name),
+date:new Date().toLocaleString()
+});
+
 localStorage.setItem("orders",JSON.stringify(orders));
+
 whatsapp(message);
+
 cart=[];
 saveCart();
-alert("WhatsApp-এ অর্ডার পাঠানোর পেজ খোলা হয়েছে। Send চাপ দিয়ে অর্ডার নিশ্চিত করুন।");
+
+alert("WhatsApp-এ Send চাপ দিয়ে অর্ডার নিশ্চিত করুন।");
+
 show("home");
+
 }
 
 function saveProfile(){
+
 localStorage.setItem("pname",document.getElementById("pname").value);
+
 localStorage.setItem("pnumber",document.getElementById("pnumber").value);
+
 alert("প্রোফাইল সংরক্ষিত হয়েছে");
-}
-function renderAccount(){
-let name=localStorage.getItem("pname")||"নাম যোগ করা হয়নি";
-let number=localStorage.getItem("pnumber")||"নম্বর যোগ করা হয়নি";
-document.getElementById("accountInfo").innerHTML="<p>নাম: "+name+"</p><p>মোবাইল: "+number+"</p>";
-}
-function saveAddress(){
-localStorage.setItem("address",document.getElementById("savedAddress").value);
-alert("ঠিকানা সংরক্ষিত হয়েছে");
-}
-function renderOrders(){
-let orders=JSON.parse(localStorage.getItem("orders")||"[]");
-document.getElementById("orderList").innerHTML=orders.map(o=>`
-<div class="setting"><div><b>${o.date}</b><p>${o.items.join(", ")}</p>৳${o.total}<br>${o.method}</div></div>`).join("")||"এখনো কোনো অর্ডার নেই।";
-}
-function addWish(i){
-if(!wishlist.includes(i))wishlist.push(i);
-localStorage.setItem("wishlist",JSON.stringify(wishlist));
-alert("পছন্দের তালিকায় যোগ হয়েছে");
-}
-function renderWishlist(){
-document.getElementById("wishList").innerHTML=wishlist.map(i=>`
-<div class="setting">${products[i][0]} — ৳${products[i][1]} <button onclick="buy(${i})">অর্ডার</button></div>`).join("")||"কোনো পণ্য নেই।";
+
 }
 
-document.getElementById("pname").value=localStorage.getItem("pname")||"";
-document.getElementById("pnumber").value=localStorage.getItem("pnumber")||"";
-document.getElementById("savedAddress").value=localStorage.getItem("address")||"";
-document.getElementById("count").innerText=cart.length;
+function renderAccount(){
+
+const name=localStorage.getItem("pname")||"নাম যোগ করা হয়নি";
+
+const number=localStorage.getItem("pnumber")||"নম্বর যোগ করা হয়নি";
+
+document.getElementById("accountInfo").innerHTML=
+"<p>নাম: "+safeText(name)+"</p>"+
+"<p>মোবাইল: "+safeText(number)+"</p>";
+
+}
+
+function saveAddress(){
+
+localStorage.setItem(
+"address",
+document.getElementById("savedAddress").value
+);
+
+alert("ঠিকানা সংরক্ষিত হয়েছে");
+
+}
+
+function renderOrders(){
+
+const orders=readStorage("orders");
+
+document.getElementById("orderList").innerHTML=
+
+orders.map(o=>`
+
+<div class="setting">
+
+<div>
+
+<b>${safeText(o.date)}</b>
+
+<p>${(o.items||[]).map(safeText).join(", ")}</p>
+
+৳${Number(o.total)||0}
+
+<br>
+
+${safeText(o.method)}
+
+</div>
+
+</div>
+
+`).join("")||"এখনো কোনো অর্ডার নেই।";
+
+}
+
+function addWish(id){
+
+if(!getProduct(id))return;
+
+if(!wishlist.includes(id))wishlist.push(id);
+
+localStorage.setItem("wishlist",JSON.stringify(wishlist));
+
+alert("পছন্দের তালিকায় যোগ হয়েছে");
+
+}
+
+function renderWishlist(){
+
+document.getElementById("wishList").innerHTML=
+
+wishlist.map(id=>{
+
+const p=getProduct(id);
+if(!p)return "";
+
+return `
+
+<div class="setting">
+
+${safeText(p.name)} — ৳${p.price}
+
+<button onclick="buy('${safeText(p.id)}')">
+অর্ডার
+</button>
+
+</div>
+
+`;
+
+}).join("")||"কোনো পণ্য নেই।";
+
+}
+
+Object.assign(window,{
+show,
+renderProducts,
+filterCategory,
+addCart,
+removeCart,
+buy,
+checkout,
+whatsapp,
+placeOrder,
+saveProfile,
+saveAddress,
+addWish
+});
+
+document.getElementById("pname").value=
+localStorage.getItem("pname")||"";
+
+document.getElementById("pnumber").value=
+localStorage.getItem("pnumber")||"";
+
+document.getElementById("savedAddress").value=
+localStorage.getItem("address")||"";
+
+saveCart();
 
 renderProducts();
 renderCategories();
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBZax7oBZA9LHs9hlTUEstbX0NlbyC5Ae0",
-  authDomain: "smart-bazar-24.firebaseapp.com",
-  projectId: "smart-bazar-24",
-  storageBucket: "smart-bazar-24.firebasestorage.app",
-  messagingSenderId: "100684524932",
-  appId: "1:100684524932:web:449afbb7e4d9f2ad2e81d1",
-  measurementId: "G-RGHK2GV9BC"
-};
+renderCart();
+renderWishlist();
+
+loadProducts();
+
 </script>
+
 </body>
- </html>
+  </html>
