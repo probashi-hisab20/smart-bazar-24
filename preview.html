@@ -1,1 +1,167 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b12">
+  <title>SMART BAZAR 24 | Online Shopping</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="topbar">
+    SMART BAZAR 24 — সেরা পণ্য, সেরা দাম!
+  </div>
+
+  <header class="header">
+    <div class="container header-main">
+      <a href="preview.html" class="logo">SMART <span>BAZAR 24</span></a>
+
+      <form class="search-box" id="searchForm">
+        <input id="searchInput" type="search" placeholder="আপনার পণ্য খুঁজুন..." aria-label="পণ্য খুঁজুন">
+        <button type="submit">খুঁজুন</button>
+      </form>
+
+      <div class="header-actions">
+        <a href="#account">👤 অ্যাকাউন্ট</a>
+        <a href="#cart">🛒 কার্ট <span id="cartCount">0</span></a>
+      </div>
+    </div>
+
+    <nav class="navbar">
+      <div class="container">
+        <a href="preview.html">হোম</a>
+        <a href="#categories">ক্যাটাগরি</a>
+        <a href="#products">সব পণ্য</a>
+        <a href="#offers">অফার</a>
+        <a href="#account">আমার প্রোফাইল</a>
+        <a href="#cart">কার্ট</a>
+        <a href="#support">সাপোর্ট</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-card">
+        <div class="hero-content">
+          <h1>আপনার পছন্দের কেনাকাটা <span>এখন এক জায়গায়!</span></h1>
+          <p>SMART BAZAR 24-এ উপভোগ করুন সহজ ও সুন্দর অনলাইন শপিং অভিজ্ঞতা।</p>
+          <a href="#products" class="btn-gold">এখনই কেনাকাটা করুন</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" id="categories">
+      <div class="section-heading">
+        <h2>পণ্যের <span>ক্যাটাগরি</span></h2>
+        <a href="#products">সব দেখুন →</a>
+      </div>
+
+      <div class="category-grid">
+        <a class="category-card" href="#products"><div class="category-icon">📱</div><h3>ইলেকট্রনিক্স</h3></a>
+        <a class="category-card" href="#products"><div class="category-icon">👕</div><h3>ফ্যাশন</h3></a>
+        <a class="category-card" href="#products"><div class="category-icon">🏠</div><h3>হোম ও কিচেন</h3></a>
+        <a class="category-card" href="#products"><div class="category-icon">💄</div><h3>বিউটি</h3></a>
+        <a class="category-card" href="#products"><div class="category-icon">🛒</div><h3>গ্রোসারি</h3></a>
+        <a class="category-card" href="#products"><div class="category-icon">⌚</div><h3>ঘড়ি ও এক্সেসরিজ</h3></a>
+      </div>
+    </section>
+
+    <section class="section container" id="offers">
+      <div class="section-heading">
+        <h2>বিশেষ <span>অফার</span></h2>
+      </div>
+      <div class="promo-grid">
+        <div class="promo-card"><h3>বিশেষ ডিসকাউন্ট</h3><p>পছন্দের পণ্যে আকর্ষণীয় অফার।</p></div>
+        <div class="promo-card"><h3>নতুন কালেকশন</h3><p>নতুন পণ্য দেখুন এক জায়গায়।</p></div>
+        <div class="promo-card"><h3>সহজ অর্ডার</h3><p>WhatsApp-এর মাধ্যমে অর্ডার পাঠানোর সুবিধা।</p></div>
+      </div>
+    </section>
+
+    <section class="section container" id="products">
+      <div class="section-heading">
+        <h2>জনপ্রিয় <span>পণ্য</span></h2>
+        <a href="#products">সব পণ্য →</a>
+      </div>
+
+      <div class="product-grid" id="productGrid">
+        <article class="product-card">
+          <div class="product-image">পণ্যের ছবি</div>
+          <div class="product-info">
+            <h3>পণ্যের নাম এখানে</h3>
+            <div class="price">৳ 0</div>
+            <div class="product-actions">
+              <button type="button" class="add-cart">কার্টে রাখুন</button>
+              <button type="button" class="wishlist">♡</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section container" id="account">
+      <div class="section-heading"><h2>আমার <span>অ্যাকাউন্ট</span></h2></div>
+      <div class="promo-card">
+        <h3>কাস্টমার অ্যাকাউন্ট</h3>
+        <p>লগইন, রেজিস্ট্রেশন, অর্ডার হিস্টোরি ও প্রোফাইল সুবিধা এখানে যুক্ত করা হবে।</p>
+      </div>
+    </section>
+
+    <section class="section container" id="cart">
+      <div class="section-heading"><h2>আমার <span>কার্ট</span></h2></div>
+      <div class="promo-card">
+        <p>আপনার নির্বাচিত পণ্য এখানে দেখানো হবে।</p>
+      </div>
+    </section>
+
+    <section class="section container" id="support">
+      <div class="section-heading"><h2>কাস্টমার <span>সাপোর্ট</span></h2></div>
+      <div class="promo-card">
+        <h3>আমরা আপনাকে সাহায্য করতে প্রস্তুত</h3>
+        <p>অর্ডার বা পণ্য সম্পর্কে জানতে আমাদের সঙ্গে যোগাযোগ করুন।</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div><h3>SMART BAZAR 24</h3><p>আপনার বিশ্বস্ত অনলাইন শপিং ঠিকানা।</p></div>
+        <div><h3>কুইক লিংক</h3><a href="preview.html">হোম</a><a href="#products">পণ্য</a><a href="#offers">অফার</a></div>
+        <div><h3>কাস্টমার সার্ভিস</h3><a href="#support">সাপোর্ট</a><a href="#account">আমার অ্যাকাউন্ট</a></div>
+        <div><h3>নীতিমালা</h3><a href="#support">রিটার্ন ও রিফান্ড</a><a href="#support">প্রাইভেসি পলিসি</a></div>
+      </div>
+      <div class="footer-bottom">© 2026 SMART BAZAR 24. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const cards = document.querySelectorAll("#productGrid .product-card");
+      cards.forEach(card => {
+        card.style.display = card.textContent.toLowerCase().includes(query) ? "" : "none";
+      });
+      document.getElementById("products").scrollIntoView({behavior:"smooth"});
+    });
+
+    let cartCount = 0;
+    document.querySelectorAll(".add-cart").forEach(button => {
+      button.addEventListener("click", () => {
+        cartCount++;
+        document.getElementById("cartCount").textContent = cartCount;
+        alert("পণ্যটি কার্টে যোগ হয়েছে।");
+      });
+    });
+
+    document.querySelectorAll(".wishlist").forEach(button => {
+      button.addEventListener("click", () => {
+        button.textContent = button.textContent === "♡" ? "♥" : "♡";
+      });
+    });
+  </script>
+
+</body>
+</html>
