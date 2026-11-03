@@ -155,12 +155,14 @@ if (orderButton) {
       existing.quantity = Number(existing.quantity || 1) + 1;
     } else {
       cart.push({
-        id: product.id,
-        name: product.name,
-        price: Number(product.price) || 0,
-        image: product.image,
-        quantity: 1
-      });
+  id: product.id,
+  name: product.name,
+  price: Number(product.price) || 0,
+  image: product.image,
+  quantity: 1,
+  productType: product.productType || "normal",
+  options: Array.isArray(product.options) ? product.options : []
+});
     }
 
     localStorage.setItem("smartBazarCart", JSON.stringify(cart));
