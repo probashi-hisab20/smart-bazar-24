@@ -171,7 +171,11 @@ $("saveProductBtn").onclick=async()=>{
  const price=Number($("productPrice").value);
  const image=$("productImage").value.trim();
  const description=$("productDescription").value.trim();
-
+const productType = $("productType").value;
+const options = $("productOptions").value
+  .split(",")
+  .map(item => item.trim())
+  .filter(Boolean);
  const msg=$("productMessage");
 
  if(!name||!Number.isFinite(price)||price<=0){
@@ -190,7 +194,9 @@ $("saveProductBtn").onclick=async()=>{
     price:price,
     image:image,
     description:description,
-    createdAt:serverTimestamp()
+productType:productType,
+options:options,
+createdAt:serverTimestamp()
    }
   );
 
