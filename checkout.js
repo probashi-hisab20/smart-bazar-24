@@ -10,34 +10,39 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function calculateTotal(cart, deliveryCharge = 0) {
-  const subtotal = cart.reduce(
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function getOptions(name) {
+  const n = String(name).toLowerCase();
+
+  if (/চাল|rice/.test(n)) {
+    return ["১ কেজি", "২ কেজি", "৫ কেজি", "১০ কেজি"];
+  }
+
+  if (/রিং|আংটি|ring/.test(n)) {
+    return ["সাইজ ৬", "সাইজ ৭", "সাইজ ৮", "সাইজ ৯", "সাইজ ১০", "সাইজ ১১"];
+  }
+
+  if (/শার্ট|জামা|প্যান্ট|টি-শার্ট|shirt|pant|t-shirt|dress|কাপড়/.test(n)) {
+    return ["S", "M", "L", "XL", "XXL"];
+  }
+
+  return ["প্রযোজ্য নয়"];
+}
+
+function calculateTotal(cart) {
+  return cart.reduce(
     (sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 1),
     0
   );
-
-  return {
-    subtotal,
-    deliveryCharge,
-    total: subtotal + deliveryCharge
-  };
-}
-
-function changeQuantity(productId, amount) {
-  const cart = getCart();
-  const item = cart.find(product => product.id === productId);
-
-  if (!item) return;
-
-  item.quantity = Math.max(1, Number(item.quantity || 1) + amount);
-  saveCart(cart);
-  renderCheckout();
-}
-
-function removeCartItem(productId) {
-  const cart = getCart().filter(item => item.id !== productId);
-  saveCart(cart);
-  renderCheckout();
 }
 
 function renderCheckout() {
@@ -46,41 +51,61 @@ function renderCheckout() {
 
   const cart = getCart();
 
-  if (cart.length === 0) {
+  if (!cart.length) {
     container.innerHTML = "<p>আপনার কার্ট খালি।</p>";
     return;
   }
 
-  container.innerHTML = cart.map(item => `
-    <div style="padding:12px;border-bottom:1px solid #555">
-      <strong>${escapeHTML(item.name)}</strong>
-      <p>দাম: ৳${Number(item.price || 0)}</p>
-      <button type="button" data-minus="${escapeHTML(item.id)}">−</button>
-      <span>${Number(item.quantity || 1)}</span>
-      <button type="button" data-plus="${escapeHTML(item.id)}">+</button>
-      <button type="button" data-remove="${escapeHTML(item.id)}">বাদ দিন</button>
-    </div>
-  `).join("");
+  container.innerHTML = cart.map(item => {
+    const options = getOptions(item.name);
 
-  const totals = calculateTotal(cart, 0);
+    return `
+      <div style="padding:14px;border-bottom:1px solid #555">
+        <strong>${escapeHTML(item.name)}</strong>
+        <p>দাম: ৳${Number(item.price || 0)}</p>
+
+        <label>সাইজ / পরিমাণ নির্বাচন করুন</label>
+        <select data-option="${escapeHTML(item.id)}"
+          style="padding:10px;width:100%;margin:8px 0">
+          ${options.map(option => `
+            <option value="${escapeHTML(option)}"
+              ${item.selectedOption === option ? "selected" : ""}>
+              ${escapeHTML(option)}
+            </option>
+          `).join("")}
+        </select>
+
+        <p>পণ্যের সংখ্যা:</p>
+        <button type="button" data-minus="${escapeHTML(item.id)}">−</button>
+        <span>${Number(item.quantity || 1)}</span>
+        <button type="button" data-plus="${escapeHTML(item.id)}">+</button>
+        <button type="button" data-remove="${escapeHTML(item.id)}">বাদ দিন</button>
+      </div>
+    `;
+  }).join("");
+
+  const total = calculateTotal(cart);
 
   container.insertAdjacentHTML("beforeend", `
     <div style="padding:15px">
-      <p>পণ্যের মূল্য: ৳${totals.subtotal}</p>
-      <p>ডেলিভারি চার্জ: ৳${totals.deliveryCharge}</p>
-      <h3>সর্বমোট: ৳${totals.total}</h3>
+      <h3>সর্বমোট: ৳${total.toLocaleString("en-US")}</h3>
     </div>
   `);
 }
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+function changeQuantity(id, amount) {
+  const cart = getCart();
+  const item = cart.find(p => p.id === id);
+  if (!item) return;
+
+  item.quantity = Math.max(1, Number(item.quantity || 1) + amount);
+  saveCart(cart);
+  renderCheckout();
+}
+
+function removeCartItem(id) {
+  saveCart(getCart().filter(item => item.id !== id));
+  renderCheckout();
 }
 
 document.getElementById("checkoutItems")?.addEventListener("click", event => {
@@ -92,27 +117,38 @@ document.getElementById("checkoutItems")?.addEventListener("click", event => {
   if (button.dataset.remove) removeCartItem(button.dataset.remove);
 });
 
+document.getElementById("checkoutItems")?.addEventListener("change", event => {
+  const select = event.target.closest("[data-option]");
+  if (!select) return;
+
+  const cart = getCart();
+  const item = cart.find(p => p.id === select.dataset.option);
+  if (!item) return;
+
+  item.selectedOption = select.value;
+  saveCart(cart);
+});
+
 function sendOrderToWhatsApp(event) {
   event.preventDefault();
 
   const cart = getCart();
 
-  if (cart.length === 0) {
+  if (!cart.length) {
     alert("আপনার কার্ট খালি!");
     return;
   }
 
-  const customerName = document.getElementById("customerName")?.value.trim();
-  const customerPhone = document.getElementById("customerPhone")?.value.trim();
-  const customerAddress = document.getElementById("customerAddress")?.value.trim();
+  const name = document.getElementById("customerName")?.value.trim();
+  const phone = document.getElementById("customerPhone")?.value.trim();
+  const address = document.getElementById("customerAddress")?.value.trim();
 
-  if (!customerName || !customerPhone || !customerAddress) {
+  if (!name || !phone || !address) {
     alert("নাম, মোবাইল নম্বর ও ঠিকানা পূরণ করুন।");
     return;
   }
 
-  const totals = calculateTotal(cart, 0);
-
+  const total = calculateTotal(cart);
   const lines = [
     "SMART BAZAR 24 - NEW ORDER",
     "",
@@ -122,24 +158,22 @@ function sendOrderToWhatsApp(event) {
   cart.forEach((item, index) => {
     lines.push(
       `${index + 1}. ${item.name}`,
-      `পরিমাণ: ${item.quantity}`,
+      `সাইজ / পরিমাণ: ${item.selectedOption || "প্রযোজ্য নয়"}`,
+      `সংখ্যা: ${item.quantity}`,
       `দাম: ৳${item.price}`,
       ""
     );
   });
 
   lines.push(
-    `পণ্যের মোট: ৳${totals.subtotal}`,
-    `ডেলিভারি চার্জ: ৳${totals.deliveryCharge}`,
-    `সর্বমোট: ৳${totals.total}`,
+    `সর্বমোট: ৳${total}`,
     "",
-    `কাস্টমারের নাম: ${customerName}`,
-    `মোবাইল: ${customerPhone}`,
-    `ঠিকানা: ${customerAddress}`
+    `কাস্টমারের নাম: ${name}`,
+    `মোবাইল: ${phone}`,
+    `ঠিকানা: ${address}`
   );
 
-  const url =
-    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+  const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
 
   window.location.href = url;
 }
@@ -150,4 +184,3 @@ document.getElementById("checkoutForm")?.addEventListener(
 );
 
 renderCheckout();
-
