@@ -1,6 +1,12 @@
 const WHATSAPP_NUMBER = "8801916551788";
 const CART_KEY = "smartBazarCart";
 
+let db;
+let auth;
+let orderSubmitting = false;
+
+const $ = id => document.getElementById(id);
+
 function getCart() {
   try {
     return JSON.parse(localStorage.getItem(CART_KEY) || "[]");
@@ -54,7 +60,7 @@ function calculateTotal(cart) {
 }
 
 function renderCheckout() {
-  const container = document.getElementById("checkoutItems");
+  const container = $("checkoutItems");
   if (!container) return;
 
   const cart = getCart();
@@ -88,7 +94,6 @@ function renderCheckout() {
     return `
       <div style="padding:14px;border-bottom:1px solid #555">
         <strong>${escapeHTML(item.name)}</strong>
-
         <p>দাম: ৳${Number(item.price || 0).toLocaleString("en-US")}</p>
 
         ${
@@ -109,14 +114,10 @@ function renderCheckout() {
         }
 
         <p>পণ্যের সংখ্যা:</p>
-
         <button type="button" data-minus="${escapeHTML(item.id)}">−</button>
         <span style="padding:10px">${Number(item.quantity || 1)}</span>
         <button type="button" data-plus="${escapeHTML(item.id)}">+</button>
-
-        <button type="button" data-remove="${escapeHTML(item.id)}">
-          বাদ দিন
-        </button>
+        <button type="button" data-remove="${escapeHTML(item.id)}">বাদ দিন</button>
       </div>
     `;
   }).join("");
@@ -135,7 +136,6 @@ function changeQuantity(id, amount) {
   if (!item) return;
 
   item.quantity = Math.max(1, Number(item.quantity || 1) + amount);
-
   saveCart(cart);
   renderCheckout();
 }
@@ -145,24 +145,16 @@ function removeCartItem(id) {
   renderCheckout();
 }
 
-document.getElementById("checkoutItems")?.addEventListener("click", event => {
+$("checkoutItems")?.addEventListener("click", event => {
   const button = event.target.closest("button");
   if (!button) return;
 
-  if (button.dataset.plus) {
-    changeQuantity(button.dataset.plus, 1);
-  }
-
-  if (button.dataset.minus) {
-    changeQuantity(button.dataset.minus, -1);
-  }
-
-  if (button.dataset.remove) {
-    removeCartItem(button.dataset.remove);
-  }
+  if (button.dataset.plus) changeQuantity(button.dataset.plus, 1);
+  if (button.dataset.minus) changeQuantity(button.dataset.minus, -1);
+  if (button.dataset.remove) removeCartItem(button.dataset.remove);
 });
 
-document.getElementById("checkoutItems")?.addEventListener("change", event => {
+$("checkoutItems")?.addEventListener("change", event => {
   const select = event.target.closest("[data-option]");
   if (!select) return;
 
@@ -175,8 +167,10 @@ document.getElementById("checkoutItems")?.addEventListener("change", event => {
   saveCart(cart);
 });
 
-function sendOrderToWhatsApp(event) {
+async function sendOrderToWhatsApp(event) {
   event.preventDefault();
+
+  if (orderSubmitting) return;
 
   const cart = getCart();
 
@@ -185,9 +179,9 @@ function sendOrderToWhatsApp(event) {
     return;
   }
 
-  const name = document.getElementById("customerName")?.value.trim();
-  const phone = document.getElementById("customerPhone")?.value.trim();
-  const address = document.getElementById("customerAddress")?.value.trim();
+  const name = $("customerName")?.value.trim();
+  const phone = $("customerPhone")?.value.trim();
+  const address = $("customerAddress")?.value.trim();
 
   if (!name || !phone || !address) {
     alert("নাম, মোবাইল নম্বর ও ঠিকানা পূরণ করুন।");
@@ -195,40 +189,98 @@ function sendOrderToWhatsApp(event) {
   }
 
   const total = calculateTotal(cart);
+  const submitButton = $("checkoutForm")?.querySelector('[type="submit"]');
 
-  const lines = [
-    "SMART BAZAR 24 - NEW ORDER",
-    "",
-    "পণ্যের তালিকা:"
-  ];
+  orderSubmitting = true;
+  if (submitButton) submitButton.disabled = true;
 
-  cart.forEach((item, index) => {
+  try {
+    // Firebase-এ অর্ডার সংরক্ষণ
+    const { addDoc, collection, serverTimestamp } =
+      await import("https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js");
+
+    const orderItems = cart.map(item => ({
+      productId: String(item.id || ""),
+      name: String(item.name || ""),
+      price: Number(item.price || 0),
+      quantity: Number(item.quantity || 1),
+      selectedOption: String(item.selectedOption || "প্রযোজ্য নয়")
+    }));
+
+    const orderData = {
+      name,
+      phone,
+      address,
+      items: orderItems,
+      total,
+      status: "Pending",
+      uid: auth.currentUser ? auth.currentUser.uid : null,
+      createdAt: serverTimestamp()
+    };
+
+    const orderRef = await addDoc(collection(db, "orders"), orderData);
+
+    // একই অর্ডার WhatsApp-এ পাঠানো
+    const lines = [
+      "SMART BAZAR 24 - NEW ORDER",
+      `অর্ডার ID: ${orderRef.id}`,
+      "",
+      "পণ্যের তালিকা:"
+    ];
+
+    cart.forEach((item, index) => {
+      lines.push(
+        `${index + 1}. ${item.name}`,
+        `সাইজ / পরিমাণ: ${item.selectedOption || "প্রযোজ্য নয়"}`,
+        `সংখ্যা: ${item.quantity}`,
+        `দাম: ৳${item.price}`,
+        ""
+      );
+    });
+
     lines.push(
-      `${index + 1}. ${item.name}`,
-      `সাইজ / পরিমাণ: ${item.selectedOption || "প্রযোজ্য নয়"}`,
-      `সংখ্যা: ${item.quantity}`,
-      `দাম: ৳${item.price}`,
-      ""
+      `সর্বমোট: ৳${total}`,
+      "",
+      `কাস্টমারের নাম: ${name}`,
+      `মোবাইল: ${phone}`,
+      `ঠিকানা: ${address}`
     );
-  });
 
-  lines.push(
-    `সর্বমোট: ৳${total}`,
-    "",
-    `কাস্টমারের নাম: ${name}`,
-    `মোবাইল: ${phone}`,
-    `ঠিকানা: ${address}`
-  );
+    // অর্ডার সফলভাবে সংরক্ষিত হওয়ার পর WhatsApp খোলা হবে
+    const url =
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
 
-  const url =
-    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+    window.location.href = url;
 
-  window.location.href = url;
+  } catch (error) {
+    console.error("Order error:", error);
+    alert("অর্ডার সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।\n" + error.message);
+
+    orderSubmitting = false;
+    if (submitButton) submitButton.disabled = false;
+  }
 }
 
-document.getElementById("checkoutForm")?.addEventListener(
-  "submit",
-  sendOrderToWhatsApp
-);
+$("checkoutForm")?.addEventListener("submit", sendOrderToWhatsApp);
 
-renderCheckout();
+// Firebase সংযোগ চালু করে Checkout প্রস্তুত করা
+async function initializeCheckout() {
+  try {
+    const firebase = await import("./firebase.js");
+
+    db = firebase.db;
+    auth = firebase.auth;
+
+    if (!db || !auth) {
+      throw new Error("Firebase-এর db অথবা auth পাওয়া যায়নি।");
+    }
+
+    renderCheckout();
+
+  } catch (error) {
+    console.error(error);
+    alert("Firebase সংযোগে সমস্যা: " + error.message);
+  }
+}
+
+initializeCheckout();
