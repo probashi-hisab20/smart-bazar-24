@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#080b12">
   <title>SMART BAZAR 24 | Online Shopping</title>
   <link rel="stylesheet" href="style.css">
+
   <style>
     .account-box, .support-box {
       background: #111827;
@@ -15,6 +16,7 @@
       margin-top: 15px;
       color: white;
     }
+
     .account-box input, .support-box input {
       width: 100%;
       padding: 12px;
@@ -23,6 +25,7 @@
       border: 1px solid #777;
       box-sizing: border-box;
     }
+
     .account-box button, .support-box button {
       padding: 11px 16px;
       margin: 5px 3px;
@@ -32,17 +35,25 @@
       color: #111;
       cursor: pointer;
     }
-    .account-box button:disabled, .support-box button:disabled {
+
+    .account-box button:disabled,
+    .support-box button:disabled {
       opacity: .6;
     }
+
     .account-box p, .support-box p {
       overflow-wrap: anywhere;
     }
+
     .account-message {
       margin-top: 10px;
       color: #f2cb72;
     }
-    .account-hidden { display: none; }
+
+    .account-hidden {
+      display: none;
+    }
+
     .order-item, .chat-message {
       padding: 10px;
       margin: 8px 0;
@@ -50,10 +61,17 @@
       border-radius: 7px;
       overflow-wrap: anywhere;
     }
-    .chat-message { white-space: pre-wrap; }
-    .chat-message.admin { border-left: 3px solid #d6ad50; }
+
+    .chat-message {
+      white-space: pre-wrap;
+    }
+
+    .chat-message.admin {
+      border-left: 3px solid #d6ad50;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="topbar">
@@ -62,10 +80,15 @@
 
   <header class="header">
     <div class="container header-main">
-      <a href="preview.html" class="logo">SMART <span>BAZAR 24</span></a>
+
+      <a href="preview.html" class="logo">
+        SMART <span>BAZAR 24</span>
+      </a>
 
       <form class="search-box" id="searchForm">
-        <input id="searchInput" type="search" placeholder="আপনার পণ্য খুঁজুন..." aria-label="পণ্য খুঁজুন">
+        <input id="searchInput" type="search"
+          placeholder="আপনার পণ্য খুঁজুন..."
+          aria-label="পণ্য খুঁজুন">
         <button type="submit">খুঁজুন</button>
       </form>
 
@@ -73,6 +96,7 @@
         <a href="#account">👤 অ্যাকাউন্ট</a>
         <a href="#cart">🛒 কার্ট <span id="cartCount">0</span></a>
       </div>
+
     </div>
 
     <nav class="navbar">
@@ -90,12 +114,22 @@
   </header>
 
   <main>
+
     <section class="hero container">
       <div class="hero-card">
         <div class="hero-content">
-          <h1>আপনার পছন্দের কেনাকাটা <span>এখন এক জায়গায়!</span></h1>
-          <p>SMART BAZAR 24-এ উপভোগ করুন সহজ ও সুন্দর অনলাইন শপিং অভিজ্ঞতা।</p>
-          <a href="#products" class="btn-gold">এখনই কেনাকাটা করুন</a>
+          <h1>
+            আপনার পছন্দের কেনাকাটা
+            <span>এখন এক জায়গায়!</span>
+          </h1>
+
+          <p>
+            SMART BAZAR 24-এ উপভোগ করুন সহজ ও সুন্দর অনলাইন শপিং অভিজ্ঞতা।
+          </p>
+
+          <a href="#products" class="btn-gold">
+            এখনই কেনাকাটা করুন
+          </a>
         </div>
       </div>
     </section>
@@ -105,13 +139,37 @@
         <h2>পণ্যের <span>ক্যাটাগরি</span></h2>
         <a href="#products">সব দেখুন →</a>
       </div>
+
       <div class="category-grid">
-        <a class="category-card" href="#products"><div class="category-icon">📱</div><h3>ইলেকট্রনিক্স</h3></a>
-        <a class="category-card" href="#products"><div class="category-icon">👕</div><h3>ফ্যাশন</h3></a>
-        <a class="category-card" href="#products"><div class="category-icon">🏠</div><h3>হোম ও কিচেন</h3></a>
-        <a class="category-card" href="#products"><div class="category-icon">💄</div><h3>বিউটি</h3></a>
-        <a class="category-card" href="#products"><div class="category-icon">🛒</div><h3>গ্রোসারি</h3></a>
-        <a class="category-card" href="#products"><div class="category-icon">⌚</div><h3>ঘড়ি ও এক্সেসরিজ</h3></a>
+        <a class="category-card" href="#products">
+          <div class="category-icon">📱</div>
+          <h3>ইলেকট্রনিক্স</h3>
+        </a>
+
+        <a class="category-card" href="#products">
+          <div class="category-icon">👕</div>
+          <h3>ফ্যাশন</h3>
+        </a>
+
+        <a class="category-card" href="#products">
+          <div class="category-icon">🏠</div>
+          <h3>হোম ও কিচেন</h3>
+        </a>
+
+        <a class="category-card" href="#products">
+          <div class="category-icon">💄</div>
+          <h3>বিউটি</h3>
+        </a>
+
+        <a class="category-card" href="#products">
+          <div class="category-icon">🛒</div>
+          <h3>গ্রোসারি</h3>
+        </a>
+
+        <a class="category-card" href="#products">
+          <div class="category-icon">⌚</div>
+          <h3>ঘড়ি ও এক্সেসরিজ</h3>
+        </a>
       </div>
     </section>
 
@@ -119,10 +177,22 @@
       <div class="section-heading">
         <h2>বিশেষ <span>অফার</span></h2>
       </div>
+
       <div class="promo-grid">
-        <div class="promo-card"><h3>বিশেষ ডিসকাউন্ট</h3><p>পছন্দের পণ্যে আকর্ষণীয় অফার।</p></div>
-        <div class="promo-card"><h3>নতুন কালেকশন</h3><p>নতুন পণ্য দেখুন এক জায়গায়।</p></div>
-        <div class="promo-card"><h3>সহজ অর্ডার</h3><p>WhatsApp-এর মাধ্যমে অর্ডার পাঠানোর সুবিধা।</p></div>
+        <div class="promo-card">
+          <h3>বিশেষ ডিসকাউন্ট</h3>
+          <p>পছন্দের পণ্যে আকর্ষণীয় অফার।</p>
+        </div>
+
+        <div class="promo-card">
+          <h3>নতুন কালেকশন</h3>
+          <p>নতুন পণ্য দেখুন এক জায়গায়।</p>
+        </div>
+
+        <div class="promo-card">
+          <h3>সহজ অর্ডার</h3>
+          <p>WhatsApp-এর মাধ্যমে অর্ডার পাঠানোর সুবিধা।</p>
+        </div>
       </div>
     </section>
 
@@ -131,24 +201,29 @@
         <h2>জনপ্রিয় <span>পণ্য</span></h2>
         <a href="#products">সব পণ্য →</a>
       </div>
+
       <div class="product-grid" id="productGrid"></div>
     </section>
 
     <!-- CUSTOMER ACCOUNT -->
+
     <section class="section container" id="account">
       <div class="section-heading">
         <h2>আমার <span>অ্যাকাউন্ট</span></h2>
       </div>
 
       <div class="account-box">
+
         <div id="loggedOut">
           <h3>নতুন অ্যাকাউন্ট তৈরি করুন</h3>
           <p>নাম, ইমেইল ও পাসওয়ার্ড দিয়ে রেজিস্ট্রেশন করুন।</p>
+
           <input id="registerName" type="text" placeholder="আপনার নাম">
           <input id="registerPhone" type="tel" placeholder="মোবাইল নম্বর">
           <input id="registerAddress" type="text" placeholder="আপনার ঠিকানা">
           <input id="accountEmail" type="email" placeholder="ইমেইল">
-          <input id="accountPassword" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
+          <input id="accountPassword" type="password"
+            placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)">
 
           <button id="registerBtn" type="button">রেজিস্ট্রেশন</button>
           <button id="loginBtn" type="button">লগইন</button>
@@ -160,33 +235,45 @@
           <p id="customerEmail"></p>
 
           <h3>আমার প্রোফাইল</h3>
+
           <input id="profileName" type="text" placeholder="আপনার নাম">
           <input id="profilePhone" type="tel" placeholder="মোবাইল নম্বর">
           <input id="profileAddress" type="text" placeholder="আপনার ঠিকানা">
-          <button id="saveProfileBtn" type="button">প্রোফাইল আপডেট করুন</button>
+
+          <button id="saveProfileBtn" type="button">
+            প্রোফাইল আপডেট করুন
+          </button>
+
           <button id="logoutBtn" type="button">লগআউট</button>
         </div>
 
         <p id="accountMessage" class="account-message" aria-live="polite"></p>
+
       </div>
     </section>
 
     <!-- CUSTOMER ORDERS -->
+
     <section class="section container account-hidden" id="myOrders">
       <div class="section-heading">
         <h2>আমার <span>অর্ডার</span></h2>
       </div>
+
       <div class="account-box">
         <div id="ordersList">অর্ডার লোড হচ্ছে...</div>
       </div>
     </section>
 
+    <!-- CART -->
+
     <section class="section container" id="cart">
       <div class="section-heading">
         <h2>আমার <span>কার্ট</span></h2>
       </div>
+
       <div class="promo-card">
         <p>আপনার নির্বাচিত পণ্য Checkout পেজে দেখতে পারবেন।</p>
+
         <a href="checkout.html" class="btn-gold" style="margin-top:15px">
           অর্ডার করুন →
         </a>
@@ -194,60 +281,120 @@
     </section>
 
     <!-- CUSTOMER SUPPORT CHAT -->
+
     <section class="section container account-hidden" id="support">
       <div class="section-heading">
         <h2>কাস্টমার <span>সাপোর্ট</span></h2>
       </div>
+
       <div class="support-box">
         <h3>আমাদের সঙ্গে কথা বলুন</h3>
-        <p>আপনার মেসেজ পাঠান। সাপোর্ট টিম উত্তর দিলে এখানে দেখতে পাবেন।</p>
-        <div id="chatMessages" aria-live="polite">চ্যাট লোড হচ্ছে...</div>
+
+        <p>
+          আপনার মেসেজ পাঠান। সাপোর্ট টিম উত্তর দিলে এখানে দেখতে পাবেন।
+        </p>
+
+        <div id="chatMessages" aria-live="polite">
+          চ্যাট লোড হচ্ছে...
+        </div>
+
         <form id="chatForm">
-          <input id="chatInput" type="text" placeholder="আপনার মেসেজ লিখুন..." required>
-          <button id="chatSendBtn" type="submit">মেসেজ পাঠান</button>
+          <input id="chatInput" type="text"
+            placeholder="আপনার মেসেজ লিখুন..." required>
+
+          <button id="chatSendBtn" type="submit">
+            মেসেজ পাঠান
+          </button>
         </form>
       </div>
     </section>
 
     <section class="section container" id="supportGuest">
-      <div class="section-heading"><h2>কাস্টমার <span>সাপোর্ট</span></h2></div>
+      <div class="section-heading">
+        <h2>কাস্টমার <span>সাপোর্ট</span></h2>
+      </div>
+
       <div class="promo-card">
         <h3>আমরা আপনাকে সাহায্য করতে প্রস্তুত</h3>
-        <p>লাইভ সাপোর্ট ব্যবহার করতে আগে আপনার অ্যাকাউন্টে লগইন করুন।</p>
+
+        <p>
+          লাইভ সাপোর্ট ব্যবহার করতে আগে আপনার অ্যাকাউন্টে লগইন করুন।
+        </p>
+
         <a href="#account" class="btn-gold">লগইন করুন</a>
       </div>
     </section>
+
   </main>
+
+  <!-- FOOTER -->
 
   <footer class="footer">
     <div class="container">
+
       <div class="footer-grid">
-        <div><h3>SMART BAZAR 24</h3><p>আপনার বিশ্বস্ত অনলাইন শপিং ঠিকানা।</p></div>
-        <div><h3>কুইক লিংক</h3><a href="preview.html">হোম</a><a href="#products">পণ্য</a><a href="#offers">অফার</a></div>
-        <div><h3>কাস্টমার সার্ভিস</h3><a href="#support">সাপোর্ট</a><a href="#account">আমার অ্যাকাউন্ট</a></div>
-        <div><h3>নীতিমালা</h3><a href="#support">রিটার্ন ও রিফান্ড</a><a href="#support">প্রাইভেসি পলিসি</a></div>
+
+        <div>
+          <h3>SMART BAZAR 24</h3>
+          <p>আপনার বিশ্বস্ত অনলাইন শপিং ঠিকানা।</p>
+        </div>
+
+        <div>
+          <h3>কুইক লিংক</h3>
+          <a href="preview.html">হোম</a>
+          <a href="#products">পণ্য</a>
+          <a href="#offers">অফার</a>
+        </div>
+
+        <div>
+          <h3>কাস্টমার সার্ভিস</h3>
+          <a href="#support">সাপোর্ট</a>
+          <a href="#account">আমার অ্যাকাউন্ট</a>
+        </div>
+
+        <div>
+          <h3>নীতিমালা</h3>
+          <a href="#support">রিটার্ন ও রিফান্ড</a>
+          <a href="#support">প্রাইভেসি পলিসি</a>
+        </div>
+
       </div>
-      <div class="footer-bottom">© 2026 SMART BAZAR 24. All rights reserved.</div>
+
+      <div class="footer-bottom">
+        © 2026 SMART BAZAR 24. All rights reserved.
+      </div>
+
     </div>
   </footer>
 
   <!-- SEARCH -->
+
   <script>
     document.getElementById("searchForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      const query = document.getElementById("searchInput").value.trim().toLowerCase();
-      document.querySelectorAll("#productGrid .product-card").forEach(card => {
-        card.style.display = card.textContent.toLowerCase().includes(query) ? "" : "none";
-      });
-      document.getElementById("products").scrollIntoView({behavior:"smooth"});
+
+      const query = document.getElementById("searchInput")
+        .value.trim().toLowerCase();
+
+      document.querySelectorAll("#productGrid .product-card")
+        .forEach(card => {
+          card.style.display = card.textContent
+            .toLowerCase().includes(query) ? "" : "none";
+        });
+
+      document.getElementById("products")
+        .scrollIntoView({behavior:"smooth"});
     });
   </script>
 
   <!-- EXISTING PRODUCT AND CART SYSTEM -->
+
   <script type="module" src="app.js"></script>
 
   <!-- CUSTOMER ACCOUNT, ORDERS AND CHAT -->
+
   <script type="module">
+
     import { auth, db } from "./firebase.js";
 
     import {
@@ -260,8 +407,15 @@
     } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
     import {
-      doc, getDoc, setDoc, collection, addDoc,
-      query, where, onSnapshot, serverTimestamp
+      doc,
+      getDoc,
+      setDoc,
+      collection,
+      addDoc,
+      query,
+      where,
+      onSnapshot,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
     const $ = id => document.getElementById(id);
@@ -275,6 +429,7 @@
     }
 
     function showError(error) {
+
       const messages = {
         "auth/email-already-in-use": "এই ইমেইল দিয়ে আগে অ্যাকাউন্ট তৈরি হয়েছে।",
         "auth/invalid-email": "সঠিক ইমেইল লিখুন।",
@@ -285,18 +440,24 @@
         "auth/too-many-requests": "অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পরে চেষ্টা করুন।",
         "permission-denied": "অনুমতি নেই। Firebase Security Rules পরীক্ষা করতে হবে।"
       };
+
       message(messages[error.code] || ("সমস্যা হয়েছে: " + error.message));
+
       console.error(error);
     }
 
     function stopListeners() {
       if (stopOrders) stopOrders();
       if (stopChat) stopChat();
+
       stopOrders = null;
       stopChat = null;
     }
 
+    // REGISTER
+
     $("registerBtn").addEventListener("click", async () => {
+
       const name = $("registerName").value.trim();
       const phone = $("registerPhone").value.trim();
       const address = $("registerAddress").value.trim();
@@ -310,9 +471,14 @@
 
       try {
         message("অ্যাকাউন্ট তৈরি হচ্ছে...");
-        const result = await createUserWithEmailAndPassword(auth, email, password);
 
-        await updateProfile(result.user, { displayName: name });
+        const result = await createUserWithEmailAndPassword(
+          auth, email, password
+        );
+
+        await updateProfile(result.user, {
+          displayName: name
+        });
 
         await setDoc(doc(db, "users", result.user.uid), {
           name,
@@ -324,12 +490,17 @@
         });
 
         message("অ্যাকাউন্ট তৈরি হয়েছে!");
+
       } catch (error) {
         showError(error);
       }
+
     });
 
+    // LOGIN
+
     $("loginBtn").addEventListener("click", async () => {
+
       const email = $("accountEmail").value.trim();
       const password = $("accountPassword").value;
 
@@ -340,15 +511,23 @@
 
       try {
         message("লগইন হচ্ছে...");
+
         await signInWithEmailAndPassword(auth, email, password);
+
         message("সফলভাবে লগইন হয়েছে!");
+
       } catch (error) {
         showError(error);
       }
+
     });
 
+    // PASSWORD RESET
+
     $("resetBtn").addEventListener("click", async () => {
+
       const email = $("accountEmail").value.trim();
+
       if (!email) {
         message("আগে ইমেইল লিখুন।");
         return;
@@ -356,22 +535,33 @@
 
       try {
         await sendPasswordResetEmail(auth, email);
+
         message("পাসওয়ার্ড রিসেটের লিংক আপনার ইমেইলে পাঠানো হয়েছে।");
+
       } catch (error) {
         showError(error);
       }
+
     });
 
+    // LOGOUT
+
     $("logoutBtn").addEventListener("click", async () => {
+
       try {
         await signOut(auth);
         message("আপনি লগআউট করেছেন।");
+
       } catch (error) {
         showError(error);
       }
+
     });
 
+    // UPDATE PROFILE
+
     $("saveProfileBtn").addEventListener("click", async () => {
+
       if (!currentUser) return;
 
       const name = $("profileName").value.trim();
@@ -384,26 +574,38 @@
       }
 
       try {
+
         await setDoc(doc(db, "users", currentUser.uid), {
-          name, phone, address,
+          name,
+          phone,
+          address,
           email: currentUser.email,
           updatedAt: serverTimestamp()
         }, { merge: true });
 
-        await updateProfile(currentUser, { displayName: name });
+        await updateProfile(currentUser, {
+          displayName: name
+        });
+
         message("প্রোফাইল আপডেট হয়েছে!");
+
       } catch (error) {
         showError(error);
       }
+
     });
 
+    // CUSTOMER ORDERS
+
     function loadOrders(user) {
+
       const ordersQuery = query(
         collection(db, "orders"),
         where("uid", "==", user.uid)
       );
 
       stopOrders = onSnapshot(ordersQuery, snapshot => {
+
         const list = $("ordersList");
         list.replaceChildren();
 
@@ -424,6 +626,7 @@
         });
 
         orders.forEach(order => {
+
           const item = document.createElement("div");
           item.className = "order-item";
 
@@ -431,23 +634,32 @@
           title.textContent = "অর্ডার: " + order.id;
 
           const status = document.createElement("p");
-          status.textContent = "স্ট্যাটাস: " + (order.status || "অপেক্ষমাণ");
+          status.textContent = "স্ট্যাটাস: " +
+            (order.status || "অপেক্ষমাণ");
 
           const total = document.createElement("p");
-          total.textContent = "মোট: " + (order.total ?? order.totalAmount ?? "তথ্য নেই");
+          total.textContent = "মোট: " +
+            (order.total ?? order.totalAmount ?? "তথ্য নেই");
 
           item.append(title, status, total);
           list.appendChild(item);
+
         });
+
       }, showError);
+
     }
 
+    // LOAD CUSTOMER CHAT
+
     function loadChat(user) {
+
       const chatQuery = query(
         collection(db, "chats", user.uid, "messages")
       );
 
       stopChat = onSnapshot(chatQuery, snapshot => {
+
         const box = $("chatMessages");
         box.replaceChildren();
 
@@ -457,6 +669,7 @@
         }
 
         const messages = snapshot.docs.map(item => item.data());
+
         messages.sort((a, b) => {
           const dateA = a.createdAt?.toMillis?.() || 0;
           const dateB = b.createdAt?.toMillis?.() || 0;
@@ -464,85 +677,158 @@
         });
 
         messages.forEach(data => {
+
           const item = document.createElement("div");
+
           item.className = "chat-message" +
             (data.sender === "admin" ? " admin" : "");
 
           const sender = document.createElement("strong");
-          sender.textContent = data.sender === "admin" ? "সাপোর্ট: " : "আপনি: ";
+
+          sender.textContent = data.sender === "admin"
+            ? "সাপোর্ট: "
+            : "আপনি: ";
 
           const text = document.createElement("span");
           text.textContent = data.text || "";
 
           item.append(sender, text);
           box.appendChild(item);
+
         });
 
         box.scrollTop = box.scrollHeight;
+
       }, showError);
+
     }
 
+    // SEND CUSTOMER MESSAGE
+    // এই অংশটি আপডেট করা হয়েছে।
+
     $("chatForm").addEventListener("submit", async event => {
+
       event.preventDefault();
+
       if (!currentUser) {
         message("চ্যাট করতে লগইন করুন।");
         return;
       }
 
       const text = $("chatInput").value.trim();
+
       if (!text) return;
 
       $("chatSendBtn").disabled = true;
 
       try {
-        await addDoc(collection(db, "chats", currentUser.uid, "messages"), {
-          text,
-          sender: "customer",
+
+        // প্রথমে কাস্টমারের মূল চ্যাট ডকুমেন্ট তৈরি হবে।
+
+        const chatRef = doc(db, "chats", currentUser.uid);
+
+        await setDoc(chatRef, {
+
           uid: currentUser.uid,
-          createdAt: serverTimestamp()
-        });
+
+          customerName:
+            currentUser.displayName || "কাস্টমার",
+
+          customerEmail:
+            currentUser.email || "",
+
+          lastMessage: text,
+
+          updatedAt: serverTimestamp()
+
+        }, { merge: true });
+
+        // এরপর কাস্টমারের মেসেজ সংরক্ষণ হবে।
+
+        await addDoc(
+          collection(db, "chats", currentUser.uid, "messages"),
+          {
+            text,
+            sender: "customer",
+            uid: currentUser.uid,
+            createdAt: serverTimestamp()
+          }
+        );
 
         $("chatInput").value = "";
+
+        message("আপনার মেসেজ পাঠানো হয়েছে।");
+
       } catch (error) {
+
         showError(error);
+
       } finally {
+
         $("chatSendBtn").disabled = false;
+
       }
+
     });
 
+    // AUTHENTICATION STATE
+
     onAuthStateChanged(auth, async user => {
+
       stopListeners();
+
       currentUser = user;
 
       $("loggedOut").classList.toggle("account-hidden", !!user);
       $("loggedIn").classList.toggle("account-hidden", !user);
+
       $("myOrders").classList.toggle("account-hidden", !user);
       $("support").classList.toggle("account-hidden", !user);
       $("supportGuest").classList.toggle("account-hidden", !!user);
 
       if (!user) {
+
         $("customerEmail").textContent = "";
         $("ordersList").textContent = "";
         $("chatMessages").textContent = "";
+
         return;
       }
 
-      $("customerEmail").textContent = "ইমেইল: " + (user.email || "");
+      $("customerEmail").textContent =
+        "ইমেইল: " + (user.email || "");
 
       try {
-        const profile = await getDoc(doc(db, "users", user.uid));
-        const data = profile.exists() ? profile.data() : {};
 
-        $("profileName").value = data.name || user.displayName || "";
-        $("profilePhone").value = data.phone || "";
-        $("profileAddress").value = data.address || "";
+        const profile = await getDoc(
+          doc(db, "users", user.uid)
+        );
+
+        const data = profile.exists()
+          ? profile.data()
+          : {};
+
+        $("profileName").value =
+          data.name || user.displayName || "";
+
+        $("profilePhone").value =
+          data.phone || "";
+
+        $("profileAddress").value =
+          data.address || "";
 
         loadOrders(user);
         loadChat(user);
+
       } catch (error) {
+
         showError(error);
+
       }
+
     });
+
   </script>
+
 </body>
-</html>
+        </html>
