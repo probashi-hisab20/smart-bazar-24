@@ -2,7 +2,7 @@
   "name": "SMART BAZAR 24",
   "short_name": "SMART BAZAR",
   "description": "SMART BAZAR 24 Online Shopping",
-  "start_url": "./",
+  "start_url": "./preview.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
