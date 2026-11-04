@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SMART BAZAR 24 - Admin</title>
+<meta name="theme-color" content="#101010">
+<title>SMART BAZAR 24 - Admin Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;padding:15px;font-family:Arial,sans-serif;
+ margin:0;padding:14px;
+ font-family:Arial,sans-serif;
  background:#101010;color:#fff;
 }
-.container{max-width:750px;margin:auto}
+.container{max-width:1000px;margin:auto}
 .box{
  background:#1c1c1c;padding:18px;margin:15px 0;
  border:1px solid #b58b32;border-radius:12px;
@@ -33,7 +35,7 @@ button:disabled{opacity:.5}
 .danger{background:#b52c2c;color:white}
 .secondary{background:#555;color:white}
 .product,.order,.chat{
- background:#292929;padding:12px;margin:10px 0;
+ background:#292929;padding:13px;margin:10px 0;
  border-radius:8px;border:1px solid #555;
  overflow-wrap:anywhere;
 }
@@ -47,77 +49,299 @@ button:disabled{opacity:.5}
 #dashboard{display:none}
 #message,#productMessage{overflow-wrap:anywhere}
 hr{border:0;border-top:1px solid #555;margin:20px 0}
+
+.header{
+ text-align:center;
+ padding:18px 10px;
+ background:#1c1c1c;
+ border:1px solid #b58b32;
+ border-radius:12px;
+}
+.header h2{margin:5px}
+.header p{color:#ccc;margin:5px}
+
+.nav{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:9px;
+ margin:15px 0;
+}
+.nav button{
+ min-height:65px;
+ background:#292929;
+ color:#fff;
+ border:1px solid #555;
+}
+.nav button.active{
+ background:#c49a3a;
+ color:#111;
+ border-color:#e6bd55;
+}
+.nav button span{
+ display:block;
+ font-size:22px;
+ margin-bottom:4px;
+}
+.nav button small{font-size:12px}
+
+.page{display:none}
+.page.active{display:block}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+}
+.stat{
+ background:#292929;
+ padding:15px 8px;
+ border:1px solid #555;
+ border-radius:9px;
+ text-align:center;
+}
+.stat strong{
+ display:block;
+ font-size:24px;
+ color:#e6bd55;
+ margin-top:8px;
+}
+.stat span{font-size:13px;color:#ddd}
+
+.chat-message{
+ background:#202b3a;
+ padding:10px;
+ margin:8px 0;
+ border-radius:7px;
+ overflow-wrap:anywhere;
+ white-space:pre-wrap;
+}
+.chat-message.admin{border-left:3px solid #d6ad50}
+.chat-message.customer{border-left:3px solid #5799dc}
+
+.chat-list-button{
+ text-align:left;
+ background:#292929;
+ color:white;
+ border:1px solid #555;
+}
+.chat-list-button.selected{
+ border:2px solid #d6ad50;
+}
+.badge{
+ display:inline-block;
+ background:#b52c2c;
+ color:white;
+ padding:3px 8px;
+ border-radius:20px;
+ font-size:12px;
+}
+.empty{
+ color:#ccc;
+ padding:15px;
+ background:#292929;
+ border-radius:8px;
+}
+@media(max-width:550px){
+ .nav{grid-template-columns:repeat(2,1fr)}
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .actions{flex-direction:column}
+}
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<div class="box">
-<h2 style="text-align:center">🛍️ SMART BAZAR 24</h2>
-<h3 id="heading">Admin Login</h3>
+<!-- LOGIN -->
 
-<div id="login">
-<input id="email" type="email" placeholder="আপনার ইমেইল">
-<input id="password" type="password" placeholder="পাসওয়ার্ড">
-<button id="loginBtn">Login করুন</button>
+<div class="box" id="loginBox">
+ <div class="header">
+  <h2>🛍️ SMART BAZAR 24</h2>
+  <p>ADMIN LOGIN</p>
+ </div>
+
+ <h3>অ্যাডমিন লগইন</h3>
+ <input id="email" type="email" placeholder="আপনার ইমেইল">
+ <input id="password" type="password" placeholder="পাসওয়ার্ড">
+ <button id="loginBtn">Login করুন</button>
+ <p id="message"></p>
 </div>
 
-<p id="message"></p>
-</div>
+<!-- DASHBOARD -->
 
 <div id="dashboard">
 
-<div class="box">
-<h3>➕ নতুন পণ্য যোগ / এডিট</h3>
+ <div class="header">
+  <h2>🛍️ SMART BAZAR 24</h2>
+  <p>ADMIN CONTROL PANEL</p>
+  <p id="adminEmail" class="small"></p>
+ </div>
 
-<input id="productName" placeholder="পণ্যের নাম">
-<input id="productPrice" type="number" placeholder="পণ্যের দাম">
-<input id="productImage" type="url" placeholder="ছবির URL (ঐচ্ছিক)">
-<textarea id="productDescription" placeholder="পণ্যের বিবরণ"></textarea>
+ <!-- NAVIGATION -->
 
-<label>পণ্যের ধরন</label>
-<select id="productType">
-<option value="normal">সাধারণ পণ্য</option>
-<option value="clothing">পোশাক</option>
-<option value="ring">রিং / আংটি</option>
-<option value="weight">ওজন অনুযায়ী পণ্য</option>
-</select>
+ <div class="nav">
+  <button class="active" data-page="homePage">
+   <span>🏠</span>ড্যাশবোর্ড
+  </button>
 
-<label>সাইজ / ওজনের অপশন</label>
-<input id="productOptions" placeholder="যেমন: S, M, L, XL অথবা ১ কেজি, ২ কেজি">
-<p class="small">একাধিক অপশন দিতে কমা (,) ব্যবহার করো।</p>
+  <button data-page="ordersPage">
+   <span>📦</span>অর্ডার
+  </button>
 
-<button id="saveProductBtn">পণ্য সংরক্ষণ করুন</button>
-<button id="cancelEditBtn" class="secondary" style="display:none">এডিট বাতিল করুন</button>
-<p id="productMessage"></p>
-</div>
+  <button data-page="messagesPage">
+   <span>💬</span>মেসেজ
+   <small id="messageCount"></small>
+  </button>
 
-<div class="box">
-<h3>📦 আমার পণ্যসমূহ</h3>
-<div id="productList">পণ্য লোড হচ্ছে...</div>
-</div>
+  <button data-page="productsPage">
+   <span>🛍️</span>পণ্য
+  </button>
 
-<div class="box">
-<h3>🧾 কাস্টমার অর্ডার</h3>
-<div id="orderList">অর্ডার লোড হচ্ছে...</div>
-</div>
+  <button data-page="logoutPage">
+   <span>🚪</span>লগআউট
+  </button>
+ </div>
 
-<div class="box">
-<h3>💬 কাস্টমার লাইভ চ্যাট</h3>
-<div id="chatList">চ্যাট লোড হচ্ছে...</div>
-<hr>
-<h3>কাস্টমারকে উত্তর দিন</h3>
-<p id="selectedCustomer" class="small">কোনো কাস্টমার নির্বাচন করা হয়নি।</p>
-<div id="chatMessages"></div>
-<textarea id="replyText" placeholder="আপনার উত্তর লিখুন..."></textarea>
-<button id="sendReplyBtn">উত্তর পাঠান</button>
-<p id="chatMessage"></p>
-</div>
+ <!-- HOME PAGE -->
 
-<div class="box">
-<button id="logoutBtn" class="danger">Logout</button>
-</div>
+ <section class="page active" id="homePage">
+
+  <div class="box">
+   <h3>📊 ড্যাশবোর্ড সারাংশ</h3>
+
+   <div class="stats">
+
+    <div class="stat">
+     <span>মোট পণ্য</span>
+     <strong id="totalProducts">0</strong>
+    </div>
+
+    <div class="stat">
+     <span>মোট অর্ডার</span>
+     <strong id="totalOrders">0</strong>
+    </div>
+
+    <div class="stat">
+     <span>কাস্টমার চ্যাট</span>
+     <strong id="totalChats">0</strong>
+    </div>
+
+   </div>
+  </div>
+
+  <div class="box">
+   <h3>⚡ দ্রুত কাজ</h3>
+   <button onclick="openAdminPage('productsPage')">
+    ➕ নতুন পণ্য যোগ করুন
+   </button>
+   <button onclick="openAdminPage('ordersPage')">
+    📦 অর্ডার দেখুন
+   </button>
+   <button onclick="openAdminPage('messagesPage')">
+    💬 কাস্টমার মেসেজ দেখুন
+   </button>
+  </div>
+
+ </section>
+
+ <!-- ORDERS PAGE -->
+
+ <section class="page" id="ordersPage">
+
+  <div class="box">
+   <h3>📦 কাস্টমার অর্ডার ম্যানেজমেন্ট</h3>
+   <p class="small">সব অর্ডার এবং অর্ডারের স্ট্যাটাস এখানে থাকবে।</p>
+   <div id="orderList">অর্ডার লোড হচ্ছে...</div>
+  </div>
+
+ </section>
+
+ <!-- MESSAGES PAGE -->
+
+ <section class="page" id="messagesPage">
+
+  <div class="box">
+   <h3>💬 কাস্টমার মেসেজ</h3>
+   <p class="small">সব কাস্টমারের চ্যাট এখানে একসাথে দেখা যাবে।</p>
+   <div id="chatList">চ্যাট লোড হচ্ছে...</div>
+  </div>
+
+  <div class="box">
+   <h3>📨 কাস্টমারের সঙ্গে কথা বলুন</h3>
+
+   <p id="selectedCustomer" class="small">
+    কোনো কাস্টমার নির্বাচন করা হয়নি।
+   </p>
+
+   <div id="chatMessages">
+    কাস্টমার নির্বাচন করুন।
+   </div>
+
+   <hr>
+
+   <textarea id="replyText"
+    placeholder="আপনার উত্তর লিখুন..."></textarea>
+
+   <button id="sendReplyBtn">উত্তর পাঠান</button>
+   <p id="chatMessage"></p>
+  </div>
+
+ </section>
+
+ <!-- PRODUCTS PAGE -->
+
+ <section class="page" id="productsPage">
+
+  <div class="box">
+   <h3>➕ নতুন পণ্য যোগ / এডিট</h3>
+
+   <input id="productName" placeholder="পণ্যের নাম">
+   <input id="productPrice" type="number" placeholder="পণ্যের দাম">
+   <input id="productImage" type="url" placeholder="ছবির URL (ঐচ্ছিক)">
+   <textarea id="productDescription" placeholder="পণ্যের বিবরণ"></textarea>
+
+   <label>পণ্যের ধরন</label>
+
+   <select id="productType">
+    <option value="normal">সাধারণ পণ্য</option>
+    <option value="clothing">পোশাক</option>
+    <option value="ring">রিং / আংটি</option>
+    <option value="weight">ওজন অনুযায়ী পণ্য</option>
+   </select>
+
+   <label>সাইজ / ওজনের অপশন</label>
+
+   <input id="productOptions"
+    placeholder="যেমন: S, M, L, XL অথবা ১ কেজি, ২ কেজি">
+
+   <p class="small">একাধিক অপশন দিতে কমা (,) ব্যবহার করো।</p>
+
+   <button id="saveProductBtn">পণ্য সংরক্ষণ করুন</button>
+
+   <button id="cancelEditBtn" class="secondary" style="display:none">
+    এডিট বাতিল করুন
+   </button>
+
+   <p id="productMessage"></p>
+  </div>
+
+  <div class="box">
+   <h3>🛍️ আমার পণ্যসমূহ</h3>
+   <div id="productList">পণ্য লোড হচ্ছে...</div>
+  </div>
+
+ </section>
+
+ <!-- LOGOUT PAGE -->
+
+ <section class="page" id="logoutPage">
+  <div class="box">
+   <h3>🚪 অ্যাডমিন লগআউট</h3>
+   <p>আপনি কি অ্যাডমিন প্যানেল থেকে বের হতে চান?</p>
+   <button id="logoutBtn" class="danger">Logout করুন</button>
+  </div>
+ </section>
 
 </div>
 </div>
@@ -128,12 +352,24 @@ import {initializeApp}
 from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
 
 import {
- getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
+ getAuth,
+ signInWithEmailAndPassword,
+ signOut,
+ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import {
- getFirestore,doc,getDoc,addDoc,collection,serverTimestamp,
- onSnapshot,updateDoc,deleteDoc,query,orderBy
+ getFirestore,
+ doc,
+ getDoc,
+ addDoc,
+ collection,
+ serverTimestamp,
+ onSnapshot,
+ updateDoc,
+ deleteDoc,
+ query,
+ orderBy
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -158,36 +394,72 @@ let stopOrders=null;
 let stopChats=null;
 let stopMessages=null;
 let currentUser=null;
+let dashboardStarted=false;
 
-function showDashboard(){
- $("login").style.display="none";
- $("dashboard").style.display="block";
- $("heading").textContent="Admin Dashboard";
- $("message").textContent="";
- startDashboard();
+let productCount=0;
+let orderCount=0;
+let chatCount=0;
+
+// NAVIGATION
+
+function openAdminPage(pageId){
+
+ document.querySelectorAll(".page").forEach(page=>{
+  page.classList.remove("active");
+ });
+
+ document.querySelectorAll(".nav button").forEach(button=>{
+  button.classList.toggle(
+   "active",
+   button.dataset.page===pageId
+  );
+ });
+
+ const page=$(pageId);
+ if(page)page.classList.add("active");
+
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function clearForm(){
- editingId=null;
- $("productName").value="";
- $("productPrice").value="";
- $("productImage").value="";
- $("productDescription").value="";
- $("productType").value="normal";
- $("productOptions").value="";
- $("saveProductBtn").textContent="পণ্য সংরক্ষণ করুন";
- $("cancelEditBtn").style.display="none";
-}
+window.openAdminPage=openAdminPage;
 
-function startDashboard(){
+document.querySelectorAll(".nav button").forEach(button=>{
+ button.addEventListener("click",()=>{
+  openAdminPage(button.dataset.page);
+ });
+});
+
+// DASHBOARD START
+
+function stopAllListeners(){
+
  if(stopProducts)stopProducts();
  if(stopOrders)stopOrders();
  if(stopChats)stopChats();
+ if(stopMessages)stopMessages();
 
- // পণ্যের তালিকা
+ stopProducts=null;
+ stopOrders=null;
+ stopChats=null;
+ stopMessages=null;
+
+ dashboardStarted=false;
+}
+
+function startDashboard(){
+
+ if(dashboardStarted)return;
+ dashboardStarted=true;
+
+ // PRODUCTS
+
  stopProducts=onSnapshot(collection(db,"products"),snapshot=>{
+
   const list=$("productList");
   list.replaceChildren();
+
+  productCount=snapshot.size;
+  $("totalProducts").textContent=productCount;
 
   if(snapshot.empty){
    list.textContent="এখনো কোনো পণ্য যোগ করা হয়নি।";
@@ -195,7 +467,9 @@ function startDashboard(){
   }
 
   snapshot.forEach(productDoc=>{
+
    const p=productDoc.data();
+
    const card=document.createElement("div");
    card.className="product";
 
@@ -204,11 +478,13 @@ function startDashboard(){
    card.appendChild(name);
 
    if(p.image){
+
     const img=document.createElement("img");
     img.src=p.image;
     img.alt=p.name||"Product";
     img.onerror=()=>img.style.display="none";
     card.appendChild(img);
+
    }
 
    const price=document.createElement("p");
@@ -228,55 +504,91 @@ function startDashboard(){
 
    const editBtn=document.createElement("button");
    editBtn.textContent="✏️ এডিট";
+
    editBtn.onclick=()=>{
+
     editingId=productDoc.id;
+
     $("productName").value=p.name||"";
     $("productPrice").value=p.price??"";
     $("productImage").value=p.image||"";
     $("productDescription").value=p.description||"";
     $("productType").value=p.productType||"normal";
     $("productOptions").value=(p.options||[]).join(", ");
+
     $("saveProductBtn").textContent="পরিবর্তন সংরক্ষণ করুন";
     $("cancelEditBtn").style.display="block";
+
     $("productMessage").textContent="এখন পণ্যের তথ্য পরিবর্তন করো।";
+
+    openAdminPage("productsPage");
     window.scrollTo({top:0,behavior:"smooth"});
    };
 
    const deleteBtn=document.createElement("button");
    deleteBtn.className="danger";
    deleteBtn.textContent="🗑️ ডিলিট";
+
    deleteBtn.onclick=async()=>{
+
     if(!confirm("তুমি কি সত্যিই এই পণ্যটি ডিলিট করতে চাও?"))return;
 
     try{
+
      await deleteDoc(doc(db,"products",productDoc.id));
+
      $("productMessage").textContent="পণ্য ডিলিট হয়েছে।";
+
      if(editingId===productDoc.id)clearForm();
+
     }catch(error){
+
      alert("ডিলিট করা যায়নি: "+error.message);
+
     }
+
    };
 
    actions.append(editBtn,deleteBtn);
    card.appendChild(actions);
    list.appendChild(card);
+
   });
+
  },error=>{
   $("productList").textContent="পণ্য লোড সমস্যা: "+error.message;
  });
 
- // অর্ডারের তালিকা
+ // ORDERS
+
  stopOrders=onSnapshot(collection(db,"orders"),snapshot=>{
+
   const list=$("orderList");
   list.replaceChildren();
+
+  orderCount=snapshot.size;
+  $("totalOrders").textContent=orderCount;
 
   if(snapshot.empty){
    list.textContent="এখনো Firestore-এ কোনো অর্ডার নেই।";
    return;
   }
 
-  snapshot.forEach(orderDoc=>{
-   const o=orderDoc.data();
+  const orders=snapshot.docs.map(item=>({
+   id:item.id,
+   data:item.data()
+  }));
+
+  orders.sort((a,b)=>{
+   const dateA=a.data.createdAt?.toMillis?.()||0;
+   const dateB=b.data.createdAt?.toMillis?.()||0;
+   return dateB-dateA;
+  });
+
+  orders.forEach(orderDoc=>{
+
+   const o=orderDoc.data;
+
    const card=document.createElement("div");
    card.className="order";
 
@@ -285,73 +597,144 @@ function startDashboard(){
    card.appendChild(title);
 
    const details=document.createElement("p");
+
    details.textContent=
     "কাস্টমার: "+(o.name||o.customerName||"—")+
     " | মোট: "+(o.total??"—");
+
    card.appendChild(details);
 
    const status=document.createElement("select");
-   ["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"].forEach(value=>{
+
+   ["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"]
+   .forEach(value=>{
+
     const option=document.createElement("option");
     option.value=value;
     option.textContent=value;
-    if((o.status||"Pending")===value)option.selected=true;
+
+    if((o.status||"Pending")===value){
+     option.selected=true;
+    }
+
     status.appendChild(option);
+
    });
 
    status.onchange=async()=>{
+
     try{
-     await updateDoc(doc(db,"orders",orderDoc.id),{status:status.value});
+
+     await updateDoc(doc(db,"orders",orderDoc.id),{
+      status:status.value
+     });
+
     }catch(error){
+
      alert("স্ট্যাটাস পরিবর্তন হয়নি: "+error.message);
+
     }
+
    };
 
    card.append("অর্ডার স্ট্যাটাস: ",status);
    list.appendChild(card);
+
   });
+
  },error=>{
   $("orderList").textContent="অর্ডার লোড সমস্যা: "+error.message;
  });
 
- // চ্যাটের তালিকা
+ // CUSTOMER CHATS
+
  stopChats=onSnapshot(collection(db,"chats"),snapshot=>{
+
   const list=$("chatList");
   list.replaceChildren();
+
+  chatCount=snapshot.size;
+  $("totalChats").textContent=chatCount;
+  $("messageCount").textContent=chatCount
+   ? "("+chatCount+")"
+   : "";
 
   if(snapshot.empty){
    list.textContent="এখনো কোনো কাস্টমার চ্যাট পাওয়া যায়নি।";
    return;
   }
 
-  snapshot.forEach(chatDoc=>{
-   const card=document.createElement("div");
-   card.className="chat";
+  const chats=snapshot.docs.map(item=>({
+   id:item.id,
+   data:item.data()
+  }));
 
-   const label=document.createElement("p");
-   label.textContent="কাস্টমার ID: "+chatDoc.id;
+  chats.sort((a,b)=>{
+   const dateA=a.data.updatedAt?.toMillis?.()||0;
+   const dateB=b.data.updatedAt?.toMillis?.()||0;
+   return dateB-dateA;
+  });
+
+  chats.forEach(chatDoc=>{
 
    const btn=document.createElement("button");
-   btn.textContent="চ্যাট খুলুন";
-   btn.onclick=()=>openChat(chatDoc.id);
+   btn.className="chat-list-button";
 
-   card.append(label,btn);
-   list.appendChild(card);
+   if(selectedUid===chatDoc.id){
+    btn.classList.add("selected");
+   }
+
+   const name=chatDoc.data.customerName||"কাস্টমার";
+
+   btn.textContent=
+    "💬 "+name+
+    " — "+(chatDoc.data.customerEmail||chatDoc.id)+
+    "\n"+(chatDoc.data.lastMessage||"চ্যাট খুলুন");
+
+   btn.onclick=()=>openChat(chatDoc.id,name);
+
+   list.appendChild(btn);
+
   });
+
  },error=>{
   $("chatList").textContent="চ্যাট লোড সমস্যা: "+error.message;
  });
+
 }
 
-// পণ্য যোগ অথবা এডিট
+// PRODUCT FORM
+
+function clearForm(){
+
+ editingId=null;
+
+ $("productName").value="";
+ $("productPrice").value="";
+ $("productImage").value="";
+ $("productDescription").value="";
+ $("productType").value="normal";
+ $("productOptions").value="";
+
+ $("saveProductBtn").textContent="পণ্য সংরক্ষণ করুন";
+ $("cancelEditBtn").style.display="none";
+
+}
+
+$("cancelEditBtn").onclick=clearForm;
+
 $("saveProductBtn").onclick=async()=>{
+
  const name=$("productName").value.trim();
  const price=Number($("productPrice").value);
  const image=$("productImage").value.trim();
  const description=$("productDescription").value.trim();
  const productType=$("productType").value;
+
  const options=$("productOptions").value
-  .split(",").map(x=>x.trim()).filter(Boolean);
+  .split(",")
+  .map(x=>x.trim())
+  .filter(Boolean);
 
  const msg=$("productMessage");
 
@@ -361,82 +744,158 @@ $("saveProductBtn").onclick=async()=>{
  }
 
  const data={
-  name,price,image,description,productType,options
+  name,
+  price,
+  image,
+  description,
+  productType,
+  options
  };
 
  msg.textContent="সংরক্ষণ হচ্ছে...";
  $("saveProductBtn").disabled=true;
 
  try{
+
   if(editingId){
+
    await updateDoc(doc(db,"products",editingId),data);
    msg.textContent="পণ্যের তথ্য পরিবর্তন হয়েছে!";
+
   }else{
+
    await addDoc(collection(db,"products"),{
-    ...data,createdAt:serverTimestamp()
+    ...data,
+    createdAt:serverTimestamp()
    });
+
    msg.textContent="নতুন পণ্য যোগ হয়েছে!";
+
   }
+
   clearForm();
+
  }catch(error){
+
   msg.textContent="সমস্যা: "+error.message;
+
  }finally{
+
   $("saveProductBtn").disabled=false;
+
  }
+
 };
 
-$("cancelEditBtn").onclick=clearForm;
+// OPEN CHAT
 
-// চ্যাট খোলা
-function openChat(uid){
+function openChat(uid,name){
+
  selectedUid=uid;
- $("selectedCustomer").textContent="কাস্টমার ID: "+uid;
+
+ $("selectedCustomer").textContent=
+  "কাস্টমার: "+name+" | ID: "+uid;
+
  $("chatMessages").replaceChildren();
 
- if(stopMessages)stopMessages();
+ document.querySelectorAll(".chat-list-button").forEach(btn=>{
+  btn.classList.remove("selected");
+ });
 
  const messagesRef=collection(db,"chats",uid,"messages");
 
- stopMessages=onSnapshot(query(messagesRef,orderBy("createdAt")),snapshot=>{
-  const area=$("chatMessages");
-  area.replaceChildren();
+ if(stopMessages)stopMessages();
 
-  snapshot.forEach(messageDoc=>{
-   const m=messageDoc.data();
-   const p=document.createElement("p");
-   p.textContent=(m.sender==="admin"?"আপনি: ":"কাস্টমার: ")+(m.text||"");
-   area.appendChild(p);
-  });
- });
+ stopMessages=onSnapshot(
+  query(messagesRef,orderBy("createdAt")),
+  snapshot=>{
+
+   const area=$("chatMessages");
+   area.replaceChildren();
+
+   if(snapshot.empty){
+    area.textContent="এখনো কোনো মেসেজ নেই।";
+    return;
+   }
+
+   snapshot.forEach(messageDoc=>{
+
+    const m=messageDoc.data();
+
+    const p=document.createElement("div");
+
+    p.className="chat-message "+
+     (m.sender==="admin"?"admin":"customer");
+
+    const sender=document.createElement("strong");
+
+    sender.textContent=
+     m.sender==="admin"?"আপনি: ":"কাস্টমার: ";
+
+    const text=document.createElement("span");
+    text.textContent=m.text||"";
+
+    p.append(sender,text);
+    area.appendChild(p);
+
+   });
+
+   area.scrollTop=area.scrollHeight;
+
+  },
+  error=>{
+   $("chatMessage").textContent="চ্যাট লোড সমস্যা: "+error.message;
+  }
+ );
+
 }
 
-// কাস্টমারকে উত্তর পাঠানো
+// SEND REPLY
+
 $("sendReplyBtn").onclick=async()=>{
+
  const text=$("replyText").value.trim();
 
  if(!selectedUid){
   $("chatMessage").textContent="আগে একটি কাস্টমার চ্যাট খুলুন।";
   return;
  }
+
  if(!text)return;
 
+ $("sendReplyBtn").disabled=true;
+
  try{
-  await addDoc(collection(db,"chats",selectedUid,"messages"),{
-   text,
-   sender:"admin",
-   uid:currentUser.uid,
-   createdAt:serverTimestamp()
-  });
+
+  await addDoc(
+   collection(db,"chats",selectedUid,"messages"),
+   {
+    text,
+    sender:"admin",
+    uid:currentUser.uid,
+    createdAt:serverTimestamp()
+   }
+  );
 
   $("replyText").value="";
   $("chatMessage").textContent="উত্তর পাঠানো হয়েছে।";
+
  }catch(error){
+
   $("chatMessage").textContent="সমস্যা: "+error.message;
+
+ }finally{
+
+  $("sendReplyBtn").disabled=false;
+
  }
+
 };
 
-// Login
+// LOGIN
+
 $("loginBtn").onclick=async()=>{
+
  const email=$("email").value.trim();
  const password=$("password").value;
 
@@ -446,56 +905,80 @@ $("loginBtn").onclick=async()=>{
  }
 
  $("message").textContent="যাচাই করা হচ্ছে...";
+ $("loginBtn").disabled=true;
 
  try{
-  const result=await signInWithEmailAndPassword(auth,email,password);
-  const adminSnap=await getDoc(doc(db,"admins",result.user.uid));
-  const role=adminSnap.exists()?adminSnap.data().role:"";
 
-  if(!["superadmin","admin"].includes(role)){
-   await signOut(auth);
-   throw new Error("আপনার Admin অনুমতি নেই।");
-  }
+  await signInWithEmailAndPassword(auth,email,password);
 
-  currentUser=result.user;
-  showDashboard();
  }catch(error){
+
   $("message").textContent="Login সমস্যা: "+error.message;
+
+ }finally{
+
+  $("loginBtn").disabled=false;
+
  }
+
 };
 
-// আগে থেকে Login থাকলে
+// AUTH CHECK
+
 onAuthStateChanged(auth,async user=>{
+
+ stopAllListeners();
+ currentUser=null;
+
  if(!user){
-  currentUser=null;
-  $("login").style.display="block";
+
+  $("loginBox").style.display="block";
   $("dashboard").style.display="none";
-  $("heading").textContent="Admin Login";
+  $("message").textContent="";
+
   return;
  }
 
  try{
+
   const snap=await getDoc(doc(db,"admins",user.uid));
   const role=snap.exists()?snap.data().role:"";
 
   if(["superadmin","admin"].includes(role)){
+
    currentUser=user;
-   showDashboard();
+
+   $("loginBox").style.display="none";
+   $("dashboard").style.display="block";
+   $("adminEmail").textContent="লগইন: "+(user.email||"");
+
+   startDashboard();
+
   }else{
+
    await signOut(auth);
    $("message").textContent="আপনার Admin অনুমতি নেই।";
+
   }
+
  }catch(error){
-  $("message").textContent=error.message;
+
+  $("message").textContent="সমস্যা: "+error.message;
+
  }
+
 });
 
+// LOGOUT
+
 $("logoutBtn").onclick=async()=>{
- if(stopProducts)stopProducts();
- if(stopOrders)stopOrders();
- if(stopChats)stopChats();
+
+ stopAllListeners();
+
  if(stopMessages)stopMessages();
+
  await signOut(auth);
+
 };
 
 </script>
