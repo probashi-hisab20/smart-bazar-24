@@ -357,6 +357,18 @@ function loadMessages() {
   });
 }
 </script>
+<link rel="manifest" href="./manifest.json">
 
+<meta name="theme-color" content="#D4AF37">
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("App Ready"))
+      .catch(error => console.log(error));
+  });
+}
+</script>
 </body>
 </html>
