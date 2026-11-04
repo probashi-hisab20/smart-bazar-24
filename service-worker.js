@@ -1,16 +1,18 @@
-const CACHE_NAME = "smart-bazar-24-v1";
+const CACHE_NAME = "smart-bazar-24-v2";
 
 const FILES_TO_CACHE = [
   "./",
-  "./index.html",
+  "./preview.html",
+  "./checkout.html",
+  "./style.css",
+  "./app.js",
+  "./firebase.js",
   "./manifest.json"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(FILES_TO_CACHE);
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
   self.skipWaiting();
 });
@@ -31,8 +33,6 @@ self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
 
   event.respondWith(
-    fetch(event.request).catch(() =>
-      caches.match(event.request)
-    )
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
