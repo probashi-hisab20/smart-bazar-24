@@ -370,5 +370,43 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
+/* SMART BAZAR 24 Bottom Navigation */
+
+body {
+  padding-bottom: 85px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background: #ffffff;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -3px 12px #0001;
+  padding: 9px 4px;
+  z-index: 9999;
+}
+
+.bottom-nav a {
+  text-align: center;
+  text-decoration: none;
+  color: #666;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.bottom-nav a.active {
+  color: #c99b18;
+}
+
+.bottom-nav a span {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 3px;
+}
 </body>
 </html>
